@@ -65,6 +65,7 @@ const processLabel = toRef(() => {
 <template>
   <div
     class="special-node"
+    :class="[{ selected: selected }]"
     :style="{
       backgroundColor: bgColor,
       boxShadow: data.isRunning ? '0 0 10px rgba(0, 0, 0, 0.5)' : ''
@@ -111,6 +112,11 @@ const processLabel = toRef(() => {
   font-size: 12px;
   background: transparent;
   border: none;
+}
+
+.special-node.selected {
+  /* 选中状态样式 */
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.3);
 }
 
 .spinner {

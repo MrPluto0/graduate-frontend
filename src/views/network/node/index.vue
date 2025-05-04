@@ -3,11 +3,11 @@ import { h, ref } from 'vue';
 import { NButton, NDataTable, NDrawer, NDrawerContent, NInput, NSpace, useDialog } from 'naive-ui';
 import { fetchDeleteNode, fetchNodeList } from '@/service/api/node';
 import { useTable } from '@/hooks/common/table';
-import NodeForm from './components/NodeForm.vue';
+import NodeForm from './components/node-form.vue';
 
 // 搜索参数
 const searchParams = ref({
-  keyword: ''
+  search: ''
 });
 
 // 侧边栏控制
@@ -19,7 +19,7 @@ const dialog = useDialog();
 
 const { loading, data, columns, pagination, getData } = useTable({
   apiFn: fetchNodeList,
-  apiParams: { current: 1, size: 10, keyword: searchParams.value.keyword },
+  apiParams: { current: 1, size: 10, search: searchParams.value.search },
   columns: () => [
     {
       title: '节点名称',
@@ -28,10 +28,10 @@ const { loading, data, columns, pagination, getData } = useTable({
     },
     {
       title: '坐标',
-      key: 'position',
+      key: 'x',
       width: 150,
       render(row) {
-        return `(${row.position[0]}, ${row.position[1]})`;
+        return `(${row.x}, ${row.y})`;
       }
     },
     {
@@ -128,7 +128,7 @@ function handleDelete(row: Node) {
     <div class="mb-4">
       <NSpace justify="space-between">
         <NSpace>
-          <NInput v-model:value="searchParams.keyword" placeholder="搜索节点名称" @keyup.enter="handleSearch" />
+          <NInput v-model:value="searchParams.search" placeholder="搜索节点名称" @keyup.enter="handleSearch" />
           <NButton type="primary" @click="handleSearch">搜索</NButton>
         </NSpace>
 

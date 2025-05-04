@@ -61,7 +61,7 @@ const { loading, data, pagination, getData, columns } = useTable({
   apiParams: {
     current: 1,
     size: 10,
-    keyword: searchParams.value
+    search: searchParams.value
   }
 });
 

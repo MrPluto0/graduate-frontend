@@ -1,7 +1,7 @@
 import { createRequest } from '@sa/axios';
+import { clearAuthStorage } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
 import { transformToCamelCase, transformToSnakeCase } from '@/utils/common';
-import { localStg } from '@/utils/storage';
 import { getAuthorization, showErrorMsg } from './shared';
 import type { RequestInstanceState } from './type';
 
@@ -31,7 +31,7 @@ export const request = createRequest<App.Service.Response, RequestInstanceState>
     // async onBackendFail(response) {
     //   window.$dialog?.error({
     //     title: $t('common.error'),
-    //     content: response.data.msg,
+    //     content: response.data.message,
     //     positiveText: $t('common.confirm'),
     //     maskClosable: false,
     //     closeOnEsc: false
@@ -39,10 +39,9 @@ export const request = createRequest<App.Service.Response, RequestInstanceState>
     // },
     onError(error) {
       if (error.status === 401) {
-        localStg.remove('accessToken');
-        localStg.remove('refreshToken');
+        clearAuthStorage();
       }
-      const message = error.response?.data.msg || '网络错误';
+      const message = error.response?.data.message || '网络错误';
       showErrorMsg(request.state, message);
     }
   }

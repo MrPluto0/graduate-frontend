@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, toRefs } from 'vue';
+import { nextTick, toRefs, watch } from 'vue';
 import { VueFlow, useVueFlow } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { useGraphStore } from '@/store/modules/graph';
@@ -8,7 +8,7 @@ import SpecialNode from './modules/SpecialNode.vue';
 import SpecialEdge from './modules/SpecialEdge.vue';
 
 const { layout } = useLayout();
-const { fitView } = useVueFlow();
+const { fitView, getSelectedNodes } = useVueFlow();
 
 const store = useGraphStore();
 const { nodes, edges } = toRefs(store);
@@ -19,6 +19,13 @@ const initLayout = (direction: string) => {
     fitView();
   });
 };
+
+watch(
+  () => getSelectedNodes.value,
+  () => {
+    console.log('Selected nodes:', getSelectedNodes.value);
+  }
+);
 </script>
 
 <template>

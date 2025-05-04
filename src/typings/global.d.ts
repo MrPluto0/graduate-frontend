@@ -66,7 +66,8 @@ declare global {
     /** Node name */
     name: string;
     /** Node position coordinates [x, y] */
-    position: [number, number];
+    x: number;
+    y: number;
     /** Node properties (JSON format) */
     properties?: string;
     /** Associated device ID */

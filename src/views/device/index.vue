@@ -7,7 +7,7 @@ import DeviceForm from './components/DeviceForm.vue';
 
 // 搜索参数
 const searchParams = ref({
-  keyword: ''
+  search: ''
 });
 
 // 侧边栏控制
@@ -19,7 +19,7 @@ const dialog = useDialog();
 
 const { loading, data, columns, pagination, getData } = useTable({
   apiFn: fetchDeviceList,
-  apiParams: { current: 1, size: 10, keyword: searchParams.value.keyword },
+  apiParams: { current: 1, size: 10, search: searchParams.value.search },
   columns: () => [
     {
       title: '设备名称',
@@ -146,7 +146,7 @@ function handleDelete(row: Device) {
     <div class="mb-4">
       <NSpace justify="space-between">
         <NSpace>
-          <NInput v-model:value="searchParams.keyword" placeholder="搜索设备名称/IP/MAC" @keyup.enter="handleSearch" />
+          <NInput v-model:value="searchParams.search" placeholder="搜索设备名称/IP/MAC" @keyup.enter="handleSearch" />
           <NButton type="primary" @click="handleSearch">搜索</NButton>
         </NSpace>
 

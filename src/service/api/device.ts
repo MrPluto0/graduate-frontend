@@ -1,6 +1,6 @@
 import { request } from '../request';
 
-export function fetchDeviceList(params: Api.Common.CommonSearchParams & { keyword?: string }) {
+export function fetchDeviceList(params: Api.Common.CommonSearchParams & { search?: string }) {
   return request<Api.Common.PaginatingQueryRecord<Device>>({
     url: '/devices',
     method: 'get',

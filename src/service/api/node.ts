@@ -1,7 +1,7 @@
 import { request } from '../request';
 
 /** 获取节点列表 */
-export function fetchNodeList(params: Api.Common.CommonSearchParams & { keyword?: string }) {
+export function fetchNodeList(params: Api.Common.CommonSearchParams & { search?: string }) {
   return request<Api.Common.PaginatingQueryRecord<Node>>({
     url: '/network/nodes',
     method: 'get',
