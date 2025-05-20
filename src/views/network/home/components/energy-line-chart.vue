@@ -24,12 +24,12 @@ const dataset = ref([
 ]);
 
 const config = ref<VueUiQuickChartConfig>({
-  title: '单位时间网络各节点负载趋势图',
+  title: '各网络节点时间总能耗',
   height: 230,
   xyPeriods: [0, 1, 2, 3, 4, 5, 6, 7, 8],
   yAxisLabel: '负载指数',
   showUserOptions: false,
-  xyPaddingBottom: 20
+  xyPaddingBottom: 10
 });
 </script>
 

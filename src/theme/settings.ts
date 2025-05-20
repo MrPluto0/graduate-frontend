@@ -14,7 +14,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
   isInfoFollowPrimary: true,
   resetCacheStrategy: 'close',
   layout: {
-    mode: 'vertical',
+    mode: 'horizontal',
     scrollMode: 'content',
     reverseHorizontalMix: false
   },
@@ -23,7 +23,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
     animateMode: 'fade-slide'
   },
   header: {
-    height: 56,
+    height: 52,
     breadcrumb: {
       visible: true,
       showIcon: true
@@ -48,9 +48,9 @@ export const themeSettings: App.Theme.ThemeSetting = {
     mixChildMenuWidth: 200
   },
   footer: {
-    visible: true,
+    visible: false,
     fixed: false,
-    height: 48,
+    height: 42,
     right: true
   },
   watermark: {

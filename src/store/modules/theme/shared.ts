@@ -164,6 +164,7 @@ export function addThemeVarsToGlobal(tokens: App.Theme.BaseToken, darkTokens: Ap
 
   style.textContent = css + darkCss;
 
+  // @ts-ignore
   document.head.appendChild(style);
 }
 

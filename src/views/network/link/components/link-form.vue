@@ -32,10 +32,10 @@ const targetLoading = ref(false);
 
 const model = ref<Partial<Link>>({
   name: '',
-  status: 'inactive',
+  status: 'up',
   sourceId: undefined,
   targetId: undefined,
-  properties: '',
+  properties: '{}',
   description: ''
 });
 
@@ -47,7 +47,22 @@ const rules: FormRules = {
   status: [{ required: true, message: '请选择链路状态' }],
   sourceId: [{ required: true, message: '请选择源节点' }],
   targetId: [{ required: true, message: '请选择目标节点' }],
-  description: [{ max: 500, message: '描述最大长度为500个字符' }]
+  description: [{ max: 500, message: '描述最大长度为500个字符' }],
+  properties: [
+    {
+      validator: (_, value) => {
+        if (!value) return true;
+        try {
+          JSON.parse(value);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      message: '请输入有效的 JSON 格式',
+      trigger: 'blur'
+    }
+  ]
 };
 
 // 搜索节点列表
@@ -78,18 +93,21 @@ async function handleSubmit() {
     await formRef.value.validate();
     loading.value = true;
 
+    const form = {
+      ...model.value,
+      properties: JSON.parse(model.value.properties || '{}')
+    };
+
     if (props.operateType === 'edit' && props.editingData?.id) {
-      await fetchUpdateLink(props.editingData.id, model.value);
+      await fetchUpdateLink(props.editingData.id, form);
       window.$message?.success('更新成功');
     } else {
-      await fetchCreateLink(model.value as Link);
+      await fetchCreateLink(form as Link);
       window.$message?.success('创建成功');
     }
 
     emit('success');
     handleClose();
-  } catch {
-    window.$message?.error('操作失败');
   } finally {
     loading.value = false;
   }
@@ -140,9 +158,9 @@ watch(
           <NSelect
             v-model:value="model.status"
             :options="[
-              { label: '活动', value: 'active' },
-              { label: '非活动', value: 'inactive' },
-              { label: '错误', value: 'error' }
+              { label: '活动', value: 'up' },
+              { label: '非活动', value: 'down' },
+              { label: '错误', value: 'unknown' }
             ]"
           />
         </NFormItem>
@@ -172,7 +190,12 @@ watch(
         </NFormItem>
 
         <NFormItem label="属性" path="properties">
-          <NInput v-model:value="model.properties" type="textarea" placeholder="请输入链路属性（JSON格式）" />
+          <NInput
+            v-model:value="model.properties"
+            type="textarea"
+            :autosize="{ minRows: 3, maxRows: 10 }"
+            placeholder="请输入链路属性（JSON格式）"
+          />
         </NFormItem>
 
         <NFormItem label="描述" path="description">

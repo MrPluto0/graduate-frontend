@@ -35,6 +35,21 @@ const rules: FormRules = {
       trigger: ['blur', 'change'],
       type: 'number' // 明确指定类型
     }
+  ],
+  properties: [
+    {
+      validator: (_, value) => {
+        if (!value) return true;
+        try {
+          JSON.parse(value);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      message: '请输入有效的 JSON 格式',
+      trigger: 'blur'
+    }
   ]
 };
 
@@ -62,11 +77,16 @@ async function handleSubmit() {
   await formRef.value?.validate();
 
   try {
+    const form = {
+      ...formModel.value,
+      properties: JSON.parse(formModel.value.properties || '{}')
+    };
+
     if (props.type === 'add') {
-      await fetchCreateNode(formModel.value as Node);
+      await fetchCreateNode(form as Node);
       window.$message?.success('创建成功');
     } else if (props.nodeData?.id) {
-      await fetchUpdateNode(props.nodeData.id, formModel.value);
+      await fetchUpdateNode(props.nodeData.id, form);
       window.$message?.success('更新成功');
     }
     emit('success');
@@ -100,6 +120,15 @@ async function handleSubmit() {
 
     <NFormItem label="Y坐标" path="position.1">
       <NInputNumber v-model:value="formModel.y" placeholder="请输入Y坐标" />
+    </NFormItem>
+
+    <NFormItem label="属性" path="properties">
+      <NInput
+        v-model:value="formModel.properties"
+        type="textarea"
+        :autosize="{ minRows: 3, maxRows: 10 }"
+        placeholder="请输入节点属性（JSON格式）"
+      />
     </NFormItem>
 
     <NFormItem label="描述" path="description">

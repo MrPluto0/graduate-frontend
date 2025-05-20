@@ -169,6 +169,8 @@ const routeMap: RouteMap = {
   "device": "/device",
   "home": "/home",
   "iframe-page": "/iframe-page/:url",
+  "log": "/log",
+  "log_home": "/log/home",
   "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?",
   "network": "/network",
   "network_home": "/network/home",

@@ -1,52 +1,37 @@
 <script setup lang="ts">
-import { nextTick, toRefs, watch } from 'vue';
-import { VueFlow, useVueFlow } from '@vue-flow/core';
-import { Background } from '@vue-flow/background';
-import { useGraphStore } from '@/store/modules/graph';
-import { useLayout } from '@/hooks/common/flow';
-import SpecialNode from './modules/SpecialNode.vue';
-import SpecialEdge from './modules/SpecialEdge.vue';
+import { computed } from 'vue';
+import { useAppStore } from '@/store/modules/app';
+import GraphData from './components/graph-data.vue';
+import CardData from './components/card-data.vue';
+import QueueLineChart from './components/queue-line-chart.vue';
+import DelayLineChart from './components/delay-line-chart.vue';
+import EnergyLineChart from './components/energy-line-chart.vue';
 
-const { layout } = useLayout();
-const { fitView, getSelectedNodes } = useVueFlow();
+const appStore = useAppStore();
 
-const store = useGraphStore();
-const { nodes, edges } = toRefs(store);
-
-const initLayout = (direction: string) => {
-  nodes.value = layout(nodes.value, edges.value, direction);
-  nextTick(() => {
-    fitView();
-  });
-};
-
-watch(
-  () => getSelectedNodes.value,
-  () => {
-    console.log('Selected nodes:', getSelectedNodes.value);
-  }
-);
+const gap = computed(() => (appStore.isMobile ? 0 : 16));
 </script>
 
 <template>
-  <VueFlow :nodes="nodes" :edges="edges" @init="initLayout('LR')">
-    <!-- bind your custom node type to a component by using slots, slot names are always `node-<type>` -->
-    <template #node-special="specialNodeProps">
-      <SpecialNode v-bind="specialNodeProps" />
-    </template>
+  <NSpace vertical :size="16">
+    <CardData />
 
-    <!-- bind your custom edge type to a component by using slots, slot names are always `edge-<type>` -->
-    <template #edge-special="specialEdgeProps">
-      <SpecialEdge v-bind="specialEdgeProps" />
-    </template>
+    <div class="h-120 card-wrapper">
+      <GraphData />
+    </div>
 
-    <Background pattern-color="#aaa" :gap="16" />
-  </VueFlow>
+    <NGrid :x-gap="gap" :y-gap="16" responsive="screen" item-responsive>
+      <NGi span="24 s:24 m:8">
+        <QueueLineChart />
+      </NGi>
+      <NGi span="24 s:24 m:8">
+        <DelayLineChart />
+      </NGi>
+      <NGi span="24 s:24 m:8">
+        <EnergyLineChart />
+      </NGi>
+    </NGrid>
+  </NSpace>
 </template>
 
-<style>
-/* import the necessary styles for Vue Flow to work */
-@import '@vue-flow/core/dist/style.css';
-/* import the default theme, this is optional but generally recommended */
-@import '@vue-flow/core/dist/theme-default.css';
-</style>
+<style scoped></style>

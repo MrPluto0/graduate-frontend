@@ -29,3 +29,17 @@ export function fetchDeleteDevice(id: string) {
     method: 'delete'
   });
 }
+
+export function fetchDeviceDetail(id: string | number) {
+  return request<Device>({
+    url: `/devices/${id}`,
+    method: 'get'
+  });
+}
+
+export function fetchOverviewData() {
+  return request<{ deviceCount: number; activeCount: number; nodeCount: number; linkCount: number }>({
+    url: '/overview',
+    method: 'get'
+  });
+}

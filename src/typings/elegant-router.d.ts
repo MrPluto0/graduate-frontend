@@ -23,6 +23,8 @@ declare module "@elegant-router/types" {
     "device": "/device";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
+    "log": "/log";
+    "log_home": "/log/home";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "network": "/network";
     "network_home": "/network/home";
@@ -65,6 +67,7 @@ declare module "@elegant-router/types" {
     | "device"
     | "home"
     | "iframe-page"
+    | "log"
     | "login"
     | "network"
   >;
@@ -90,6 +93,7 @@ declare module "@elegant-router/types" {
     | "login"
     | "device"
     | "home"
+    | "log_home"
     | "network_home"
     | "network_link"
     | "network_node"

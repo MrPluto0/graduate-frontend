@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
-import { fetchOverviewData } from '@/service/api/device';
 
 defineOptions({
   name: 'CardData'
@@ -16,89 +15,82 @@ interface CardData {
     start: string;
     end: string;
   };
-  icon: string;
 }
 
 const overviewData = ref({
-  deviceCount: 0,
-  activeCount: 0,
-  nodeCount: 0,
-  linkCount: 0
+  dataCount: 100123,
+  queueLen: 12312,
+  delay: 12,
+  energy: 123,
+  utilization: 90
 });
 
 const loading = ref(true);
 
 const cardData = computed<CardData[]>(() => [
   {
-    key: 'deviceCount',
-    title: '设备总数',
-    value: overviewData.value.deviceCount,
-    unit: '',
+    key: 'dataCount',
+    title: '单位时间数据流量',
+    value: overviewData.value.dataCount,
+    unit: ' bits',
     color: {
       start: '#ec4786',
       end: '#b955a4'
-    },
-    icon: 'ant-design:laptop-outlined'
+    }
   },
   {
-    key: 'activeCount',
-    title: '在线设备',
-    value: overviewData.value.activeCount,
-    unit: '',
+    key: 'queueLen',
+    title: '系统平均队列长度',
+    value: overviewData.value.queueLen,
+    unit: ' bits',
     color: {
       start: '#56cdf3',
       end: '#719de3'
-    },
-    icon: 'ant-design:check-circle-outlined'
+    }
   },
   {
     key: 'nodeCount',
-    title: '网络节点',
-    value: overviewData.value.nodeCount,
-    unit: '',
+    title: '系统当前时延',
+    value: overviewData.value.delay,
+    unit: ' ms',
     color: {
       start: '#865ec0',
       end: '#5144b4'
-    },
-    icon: 'ant-design:cluster-outlined'
+    }
   },
   {
     key: 'linkCount',
-    title: '网络链路',
-    value: overviewData.value.linkCount,
-    unit: '',
+    title: '系统当前能耗',
+    value: overviewData.value.energy,
+    unit: ' J',
     color: {
       start: '#fcbc25',
       end: '#f68057'
-    },
-    icon: 'ant-design:link-outlined'
+    }
   },
   {
-    key: 'alarmCount',
-    title: '异常报警数',
-    value: 4,
-    unit: '',
+    key: 'utilization',
+    title: '系统当前资源利用率',
+    value: overviewData.value.utilization,
+    unit: ' %',
     color: {
       start: '#ff4d4f',
       end: '#ff7875'
-    },
-    icon: 'ant-design:warning-outlined'
+    }
   }
 ]);
 
-// 获取概览数据
-async function getOverviewData() {
-  loading.value = true;
-  try {
-    const data = await fetchOverviewData();
-    overviewData.value = data;
-  } finally {
-    loading.value = false;
-  }
-}
-
 onMounted(() => {
-  getOverviewData();
+  setInterval(() => {
+    if (!overviewData.value) return;
+    // 模拟数据更新
+    overviewData.value.dataCount = Math.floor(Math.random() * 100000);
+    overviewData.value.queueLen = Math.floor(Math.random() * 10000);
+    overviewData.value.delay = Math.floor(Math.random() * 100);
+    overviewData.value.energy = Math.floor(Math.random() * 1000);
+  }, 4000);
+
+  loading.value = false;
 });
 
 interface GradientBgProps {
@@ -124,16 +116,15 @@ function getGradientColor(color: CardData['color']) {
 
     <NGrid cols="s:1 m:2 l:5" responsive="screen" :x-gap="16" :y-gap="16">
       <NGi v-for="item in cardData" :key="item.key">
-        <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
+        <GradientBg :gradient-color="getGradientColor(item.color)" class="flex flex-col flex-1 items-center">
           <h3 class="text-16px">{{ item.title }}</h3>
-          <div class="flex justify-between pt-12px">
-            <SvgIcon :icon="item.icon" class="text-32px" />
+          <div class="flex justify-between pt-3px">
             <NSpin :show="loading" size="small">
               <CountTo
-                :prefix="item.unit"
+                :suffix="item.unit"
                 :start-value="0"
                 :end-value="item.value"
-                class="text-30px text-white dark:text-dark"
+                class="text-25px text-white dark:text-dark"
               />
             </NSpin>
           </div>

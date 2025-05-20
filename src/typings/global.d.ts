@@ -76,6 +76,9 @@ declare global {
     device?: Device;
     /** Node description */
     description: string;
+    cpu?: number | string;
+    mem?: number | string;
+    disk?: number | string;
   }
 
   /** Interface for topology link */
@@ -104,5 +107,29 @@ declare global {
     properties?: string;
     /** Link description */
     description: string;
+    bandwidth?: number | string;
+    delay?: number | string;
+  }
+
+  export interface AlarmEvent {
+    /** Event ID */
+    id: number;
+    /** Creation time */
+    createdAt: string;
+    /** Update time */
+    updatedAt: string;
+    /** Deletion time */
+    deletedAt?: string;
+    /** Event name */
+    name: string;
+    /** Event type */
+    eventType: string;
+    /** Event status */
+    status: string;
+    description?: string;
+    /** Associated device ID */
+    deviceId?: number;
+    /** Associated device */
+    device?: Device;
   }
 }

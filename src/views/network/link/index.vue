@@ -16,7 +16,6 @@ const searchParams = ref('');
 const { loading, data, pagination, getData, columns } = useTable({
   apiFn: fetchLinkList,
   columns: () => [
-    { type: 'selection', key: 'selection' },
     { title: 'ID', key: 'id' },
     { title: '链路名称', key: 'name' },
     {
@@ -68,9 +67,9 @@ const { loading, data, pagination, getData, columns } = useTable({
 // 状态类型映射
 function getStatusType(status: string) {
   switch (status) {
-    case 'active':
+    case 'up':
       return 'success';
-    case 'inactive':
+    case 'down':
       return 'warning';
     default:
       return 'error';

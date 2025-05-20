@@ -167,7 +167,9 @@ const local: App.I18n.Schema = {
     network_home: '整体组网',
     network_node: '网络节点',
     network_link: '网络链路',
-    device: '设备管理'
+    device: '设备管理',
+    log: '系统日志',
+    log_home: '报警日志'
   },
   page: {
     login: {

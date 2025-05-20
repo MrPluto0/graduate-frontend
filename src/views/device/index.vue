@@ -24,7 +24,7 @@ const { loading, data, columns, pagination, getData } = useTable({
     {
       title: '设备名称',
       key: 'name',
-      width: 150
+      width: 120
     },
     {
       title: '设备类型',
@@ -40,6 +40,16 @@ const { loading, data, columns, pagination, getData } = useTable({
       title: 'IP地址',
       key: 'ip',
       width: 120
+    },
+    {
+      title: '位置',
+      key: 'location',
+      width: 100
+    },
+    {
+      title: '生产商',
+      key: 'vendor',
+      width: 100
     },
     {
       title: '状态',

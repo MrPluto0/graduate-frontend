@@ -75,6 +75,28 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'log',
+    path: '/log',
+    component: 'layout.base',
+    meta: {
+      title: 'log',
+      i18nKey: 'route.log',
+      order: 3,
+      icon: 'mdi:comment-bookmark-outline'
+    },
+    children: [
+      {
+        name: 'log_home',
+        path: '/log/home',
+        component: 'view.log_home',
+        meta: {
+          title: 'log_home',
+          i18nKey: 'route.log_home'
+        }
+      }
+    ]
+  },
+  {
     name: 'login',
     path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
     component: 'layout.blank$view.login',

@@ -163,7 +163,13 @@ const local: App.I18n.Schema = {
     500: 'Server Error',
     'iframe-page': 'Iframe',
     home: 'Home',
-    network: 'Network'
+    network: 'Network',
+    network_home: 'Network Overview',
+    network_node: 'Network Node',
+    network_link: 'Network Link',
+    device: 'Device',
+    log: 'System Log',
+    log_home: 'System Alarm'
   },
   page: {
     login: {
