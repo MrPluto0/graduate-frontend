@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { VueUiQuickChartConfig } from 'vue-data-ui';
 import { VueUiQuickChart } from 'vue-data-ui';
 import 'vue-data-ui/style.css';
@@ -27,9 +27,18 @@ const config = ref<VueUiQuickChartConfig>({
   title: '各网络节点时间总能耗',
   height: 230,
   xyPeriods: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-  yAxisLabel: '负载指数',
+  yAxisLabel: '能耗(J)',
   showUserOptions: false,
   xyPaddingBottom: 10
+});
+
+onMounted(() => {
+  setInterval(() => {
+    dataset.value.forEach(item => {
+      item.values.shift();
+      item.values.push(Math.floor(Math.random() * 40) + 20);
+    });
+  }, 3000);
 });
 </script>
 
