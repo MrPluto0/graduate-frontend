@@ -175,7 +175,10 @@ const routeMap: RouteMap = {
   "network": "/network",
   "network_home": "/network/home",
   "network_link": "/network/link",
-  "network_node": "/network/node"
+  "network_node": "/network/node",
+  "user": "/user",
+  "user_create": "/user/create",
+  "user_home": "/user/home"
 };
 
 /**

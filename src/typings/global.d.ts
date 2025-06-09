@@ -17,6 +17,21 @@ declare global {
   /** Build time of the project */
   export const BUILD_TIME: string;
 
+  /** Version of the project */
+  export interface User {
+    /** Device ID */
+    id: number;
+    /** Creation time */
+    createdAt: string;
+    /** Update time */
+    updatedAt: string;
+    /** Deletion time */
+    deletedAt?: string;
+    username: string;
+    email: string;
+    role: 'user' | 'admin';
+  }
+
   /** Interface for device information */
   export interface Device {
     /** Device ID */

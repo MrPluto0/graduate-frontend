@@ -147,5 +147,36 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       }
     ]
+  },
+  {
+    name: 'user',
+    path: '/user',
+    component: 'layout.base',
+    meta: {
+      title: 'user',
+      i18nKey: 'route.user',
+      icon: 'mdi:user',
+      order: 4
+    },
+    children: [
+      {
+        name: 'user_home',
+        path: '/user/home',
+        component: 'view.user_home',
+        meta: {
+          title: 'user_home',
+          i18nKey: 'route.user_home'
+        }
+      },
+      {
+        name: 'user_create',
+        path: '/user/create',
+        component: 'view.user_create',
+        meta: {
+          title: 'user_create',
+          i18nKey: 'route.user_create'
+        }
+      }
+    ]
   }
 ];

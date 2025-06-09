@@ -169,7 +169,10 @@ const local: App.I18n.Schema = {
     network_link: 'Network Link',
     device: 'Device',
     log: 'System Log',
-    log_home: 'System Alarm'
+    log_home: 'System Alarm',
+    user: 'User',
+    user_home: 'User Management',
+    user_create: 'Create User'
   },
   page: {
     login: {

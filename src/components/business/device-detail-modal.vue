@@ -39,7 +39,7 @@ async function loadDeviceDetail() {
 watch(
   () => props.deviceId,
   async (newId: number | undefined) => {
-    if (props.show && newId) {
+    if (newId) {
       await loadDeviceDetail();
     }
   },

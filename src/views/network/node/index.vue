@@ -3,6 +3,7 @@ import { h, ref } from 'vue';
 import { NButton, NDataTable, NDrawer, NDrawerContent, NInput, NSpace, useDialog } from 'naive-ui';
 import { fetchDeleteNode, fetchNodeList } from '@/service/api/node';
 import { useTable } from '@/hooks/common/table';
+import DeviceDetailModal from '@/components/business/device-detail-modal.vue';
 import NodeForm from './components/node-form.vue';
 
 // 搜索参数
@@ -15,12 +16,17 @@ const showDrawer = ref(false);
 const drawerType = ref<'add' | 'edit'>('add');
 const editingNode = ref<Node | undefined>();
 
+// 设备详情模态框控制
+const showDeviceModal = ref(false);
+const currentDeviceId = ref<number>();
+
 const dialog = useDialog();
 
 const { loading, data, columns, pagination, getData } = useTable({
   apiFn: fetchNodeList,
   apiParams: { current: 1, size: 10, search: searchParams.value.search },
   columns: () => [
+    { title: 'ID', key: 'id', width: 80 },
     {
       title: '节点名称',
       key: 'name',
@@ -42,7 +48,7 @@ const { loading, data, columns, pagination, getData } = useTable({
     {
       title: '操作',
       key: 'operate',
-      width: 200,
+      width: 250,
       render(row) {
         return h(
           NSpace,
@@ -66,6 +72,15 @@ const { loading, data, columns, pagination, getData } = useTable({
                   onClick: () => handleDelete(row)
                 },
                 { default: () => '删除' }
+              ),
+              h(
+                NButton,
+                {
+                  size: 'small',
+                  type: 'info',
+                  onClick: () => handleShowDevices(row)
+                },
+                { default: () => '关联设备' }
               )
             ]
           }
@@ -120,6 +135,12 @@ function handleDelete(row: Node) {
     }
   });
 }
+
+// 查看关联设备
+function handleShowDevices(row: Node) {
+  currentDeviceId.value = row.deviceId;
+  showDeviceModal.value = true;
+}
 </script>
 
 <template>
@@ -150,6 +171,9 @@ function handleDelete(row: Node) {
         />
       </NDrawerContent>
     </NDrawer>
+
+    <!-- 设备详情模态框 -->
+    <DeviceDetailModal v-model:show="showDeviceModal" :device-id="currentDeviceId" />
   </div>
 </template>
 

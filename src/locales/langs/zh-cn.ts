@@ -169,7 +169,10 @@ const local: App.I18n.Schema = {
     network_link: '网络链路',
     device: '设备管理',
     log: '系统日志',
-    log_home: '报警日志'
+    log_home: '报警日志',
+    user: '用户管理',
+    user_home: '用户列表',
+    user_create: '创建用户'
   },
   page: {
     login: {

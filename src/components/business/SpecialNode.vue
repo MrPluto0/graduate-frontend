@@ -1,64 +1,39 @@
 <script setup lang="ts">
 import { toRef } from 'vue';
 import type { NodeProps } from '@vue-flow/core';
-import { Handle, useNodeConnections } from '@vue-flow/core';
 
 const props = defineProps<NodeProps>();
 
-const sourceConnections = useNodeConnections({
-  handleType: 'target'
-});
+// const sourceConnections = useNodeConnections({
+//   handleType: 'target'
+// });
 
-const targetConnections = useNodeConnections({
-  handleType: 'source'
-});
+// const targetConnections = useNodeConnections({
+//   handleType: 'source'
+// });
 
-const isSender = toRef(() => sourceConnections.value.length <= 0);
-
-const isReceiver = toRef(() => targetConnections.value.length <= 0);
+// const isSender = toRef(() => sourceConnections.value.length <= 0);
 
 const bgColor = toRef(() => {
-  if (isSender.value) {
-    return '#2563eb';
+  switch (props.data.nodeType) {
+    case 'user_equipment':
+      return '#4b5563';
+    case 'base_station':
+      return '#2563eb';
+    default:
+      return '#fff';
   }
-
-  if (props.data.hasError) {
-    return '#f87171';
-  }
-
-  if (props.data.isFinished) {
-    return '#42B983';
-  }
-
-  if (props.data.isCancelled) {
-    return '#fbbf24';
-  }
-
-  return '#4b5563';
 });
 
 const processLabel = toRef(() => {
-  if (props.data.hasError) {
-    return '❌';
+  switch (props.data.nodeType) {
+    case 'user_equipment':
+      return '📱';
+    case 'base_station':
+      return '📡';
+    default:
+      return '🏠';
   }
-
-  if (props.data.isSkipped) {
-    return '🚧';
-  }
-
-  if (props.data.isCancelled) {
-    return '🚫';
-  }
-
-  if (isSender.value) {
-    return '📦';
-  }
-
-  if (props.data.isFinished) {
-    return '😎';
-  }
-
-  return '🏠';
 });
 </script>
 
@@ -71,15 +46,7 @@ const processLabel = toRef(() => {
       boxShadow: data.isRunning ? '0 0 10px rgba(0, 0, 0, 0.5)' : ''
     }"
   >
-    <Handle v-if="!isSender" type="target" :position="targetPosition">
-      <span v-if="!data.isRunning && !data.isFinished && !data.isCancelled && !data.isSkipped && !data.hasError">
-        📥
-      </span>
-    </Handle>
-    <Handle v-if="!isReceiver" type="source" :position="sourcePosition" />
-
-    <div v-if="!isSender && data.isRunning" class="spinner" />
-    <span v-else class="text-xl">
+    <span class="text-xl">
       {{ processLabel }}
     </span>
   </div>

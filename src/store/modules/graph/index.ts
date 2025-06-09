@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { Edge, Node } from '@vue-flow/core';
 import { fetchNetworkTopo } from '@/service/api/network';
@@ -7,6 +7,9 @@ import { apiToVueFlowEdges, apiToVueFlowNodes } from '@/utils/transform';
 export const useGraphStore = defineStore('graph', () => {
   const nodes = ref<Node[]>([]);
   const edges = ref<Edge[]>([]);
+  const settings = reactive({
+    layoutDirection: 'LR' // Top to Bottom
+  });
   const isInit = ref(false);
 
   // const nestNetworkNodes = () => {
@@ -54,6 +57,7 @@ export const useGraphStore = defineStore('graph', () => {
   return {
     nodes,
     edges,
-    initGraph
+    initGraph,
+    settings
   };
 });

@@ -26,4 +26,6 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   network_home: () => import("@/views/network/home/index.vue"),
   network_link: () => import("@/views/network/link/index.vue"),
   network_node: () => import("@/views/network/node/index.vue"),
+  user_create: () => import("@/views/user/create/index.vue"),
+  user_home: () => import("@/views/user/home/index.vue"),
 };

@@ -20,6 +20,7 @@ const store = useGraphStore();
 const { nodes, edges } = toRefs(store);
 
 const isRunning = ref(false);
+const showSettings = ref(false);
 
 const selectedNode = computed(() => getSelectedNodes.value?.[0]);
 const selectedEdge = computed(() => getSelectedEdges.value?.[0]);
@@ -48,13 +49,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <VueFlow
-    :nodes="nodes"
-    :edges="edges"
-    :default-viewport="{ zoom: 1.5 }"
-    :selection-mode="SelectionMode.Full"
-    @init="initLayout('LR')"
-  >
+  <VueFlow :nodes="nodes" :edges="edges" :default-viewport="{ zoom: 1.5 }" :selection-mode="SelectionMode.Full">
     <template #node-special="specialNodeProps">
       <SpecialNode v-bind="specialNodeProps" />
     </template>
@@ -109,7 +104,34 @@ onMounted(async () => {
         >
           <Icon icon="ant-design:column-height-outlined" class="text-lg" />
         </button>
+
+        <button
+          class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
+          title="设置"
+          @click="showSettings = !showSettings"
+        >
+          <Icon icon="ant-design:setting" class="text-lg" />
+        </button>
       </div>
+    </Panel>
+
+    <Panel v-if="showSettings" position="top-right" class="w-80 bg-white p-4 text-black shadow-lg">
+      <h3 class="mb-2 text-lg font-semibold">设置</h3>
+      <NForm :model="store" label-placement="left" size="small">
+        <NFormItem label="布局方向">
+          <NSelect
+            :value="store.settings.layoutDirection"
+            :options="[
+              { label: '水平布局', value: 'LR' },
+              { label: '垂直布局', value: 'TB' }
+            ]"
+            @update:value="initLayout(store.settings.layoutDirection)"
+          />
+        </NFormItem>
+        <NFormItem label="基站数量">
+          <NInputNumber :min="1" :max="100" :step="1" />
+        </NFormItem>
+      </NForm>
     </Panel>
 
     <Controls />
