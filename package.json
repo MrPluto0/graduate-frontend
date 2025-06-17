@@ -71,7 +71,7 @@
     "pinia": "3.0.1",
     "tailwind-merge": "3.0.2",
     "vue": "3.5.13",
-    "vue-data-ui": "^2.7.0",
+    "vue-data-ui": "^2.10.3",
     "vue-draggable-plus": "0.6.0",
     "vue-i18n": "11.1.2",
     "vue-router": "4.5.0"
@@ -109,12 +109,5 @@
     "vite-plugin-vue-devtools": "7.7.2",
     "vue-eslint-parser": "10.1.1",
     "vue-tsc": "2.2.8"
-  },
-  "simple-git-hooks": {
-    "commit-msg": "pnpm sa git-commit-verify"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
-  },
-  "website": "https://admin.soybeanjs.cn"
+  }
 }

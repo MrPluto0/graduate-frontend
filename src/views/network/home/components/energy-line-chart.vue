@@ -2,43 +2,38 @@
 import { onMounted, ref } from 'vue';
 import type { VueUiQuickChartConfig } from 'vue-data-ui';
 import { VueUiQuickChart } from 'vue-data-ui';
+import { useGraphStore } from '@/store/modules/graph';
 import 'vue-data-ui/style.css';
 
 const dataset = ref([
   {
-    name: '节点一',
-    values: [45, 48, 52, 55, 50, 48, 46, 49, 51]
-  },
-  {
-    name: '节点二',
-    values: [62, 65, 60, 58, 63, 67, 64, 61, 63]
-  },
-  {
-    name: '节点三',
-    values: [35, 38, 42, 40, 37, 39, 41, 38, 36]
-  },
-  {
-    name: '节点四',
-    values: [55, 52, 54, 58, 56, 53, 51, 54, 57]
+    name: '节点能耗',
+    values: [0, 0, 0, 0, 0, 0, 0]
   }
 ]);
 
 const config = ref<VueUiQuickChartConfig>({
-  title: '各网络节点时间总能耗',
+  title: '系统的总能耗',
   height: 230,
-  xyPeriods: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  xyPeriods: [0, 1, 2, 3, 4, 5, 6],
   yAxisLabel: '能耗(J)',
   showUserOptions: false,
-  xyPaddingBottom: 10
+  xyPaddingBottom: 10,
+  dataLabelRoundingValue: 2
 });
+
+const store = useGraphStore();
 
 onMounted(() => {
   setInterval(() => {
-    dataset.value.forEach(item => {
-      item.values.shift();
-      item.values.push(Math.floor(Math.random() * 40) + 20);
-    });
-  }, 3000);
+    if (dataset.value[0].values.length >= 10) {
+      dataset.value[0].values.shift();
+      config.value.xyPeriods = config.value.xyPeriods?.map(v => Number(v) + 1);
+    } else {
+      config.value.xyPeriods?.push(config.value.xyPeriods.length);
+    }
+    dataset.value[0].values.push(store.algStatus?.energy ?? 0);
+  }, 1000);
 });
 </script>
 

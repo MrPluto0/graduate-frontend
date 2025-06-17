@@ -78,8 +78,8 @@ importers:
         specifier: 3.5.13
         version: 3.5.13(typescript@5.8.2)
       vue-data-ui:
-        specifier: ^2.7.0
-        version: 2.7.0(vue@3.5.13(typescript@5.8.2))
+        specifier: ^2.10.3
+        version: 2.10.3(vue@3.5.13(typescript@5.8.2))
       vue-draggable-plus:
         specifier: 0.6.0
         version: 0.6.0(@types/sortablejs@1.15.8)
@@ -4132,10 +4132,14 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
-  vue-data-ui@2.7.0:
-    resolution: {integrity: sha512-V9OFwq8iE+NZXzCTALn2sUI0CX6clF6llnm+JMlaN+OpVgPLW8cymOWNgxiuWhblV1TVyZXea9QP9Z4BjBdYnQ==}
+  vue-data-ui@2.10.3:
+    resolution: {integrity: sha512-2y3aGh7ZgWzdr3qM9dt6C8xrFMoRdFC7bJ4Xt2yWM+QsUj3+11grbg+49r9yH17sNmyifA0A7b/uIftOtW7SoQ==}
     peerDependencies:
+      jspdf: ^3.0.1
       vue: '>=3.3.0'
+    peerDependenciesMeta:
+      jspdf:
+        optional: true
 
   vue-demi@0.13.11:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
@@ -8508,7 +8512,7 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
-  vue-data-ui@2.7.0(vue@3.5.13(typescript@5.8.2)):
+  vue-data-ui@2.10.3(vue@3.5.13(typescript@5.8.2)):
     dependencies:
       vue: 3.5.13(typescript@5.8.2)
 

@@ -67,6 +67,19 @@ declare namespace Api {
     }
   }
 
+  namespace Alg {
+    interface AlgStatus {
+      isRunning: boolean;
+      isInitialized: boolean;
+      timeSlot: number;
+      queue: number;
+      eachQueue: number[];
+      delay: number;
+      energy: number;
+      utilization: number;
+    }
+  }
+
   /**
    * namespace Route
    *

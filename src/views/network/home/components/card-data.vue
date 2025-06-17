@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
+import { useGraphStore } from '@/store/modules/graph';
 
 defineOptions({
   name: 'CardData'
@@ -17,13 +18,15 @@ interface CardData {
   };
 }
 
-const overviewData = ref({
-  dataCount: 100123,
-  queueLen: 12312,
-  delay: 12,
-  energy: 123,
-  utilization: 90
-});
+const store = useGraphStore();
+
+// const overviewData = ref({
+//   dataCount: 100123,
+//   queueLen: 12312,
+//   delay: 12,
+//   energy: 123,
+//   utilization: 90
+// });
 
 const loading = ref(true);
 
@@ -31,7 +34,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'dataCount',
     title: '单位时间数据流量',
-    value: overviewData.value.dataCount,
+    value: 0,
     unit: ' bits',
     color: {
       start: '#ec4786',
@@ -41,7 +44,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'queueLen',
     title: '系统平均队列长度',
-    value: overviewData.value.queueLen,
+    value: store.algStatus.queue ?? 0,
     unit: ' bits',
     color: {
       start: '#56cdf3',
@@ -51,7 +54,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'nodeCount',
     title: '系统当前时延',
-    value: overviewData.value.delay,
+    value: store.algStatus.delay ?? 0,
     unit: ' ms',
     color: {
       start: '#865ec0',
@@ -61,7 +64,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'linkCount',
     title: '系统当前能耗',
-    value: overviewData.value.energy,
+    value: store.algStatus.energy ?? 0,
     unit: ' J',
     color: {
       start: '#fcbc25',
@@ -71,7 +74,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'utilization',
     title: '系统当前资源利用率',
-    value: overviewData.value.utilization,
+    value: (store.algStatus.utilization ?? 0) * 100,
     unit: ' %',
     color: {
       start: '#ff4d4f',
@@ -81,15 +84,14 @@ const cardData = computed<CardData[]>(() => [
 ]);
 
 onMounted(() => {
-  setInterval(() => {
-    if (!overviewData.value) return;
-    // 模拟数据更新
-    overviewData.value.dataCount = Math.floor(Math.random() * 100000);
-    overviewData.value.queueLen = Math.floor(Math.random() * 10000);
-    overviewData.value.delay = Math.floor(Math.random() * 100);
-    overviewData.value.energy = Math.floor(Math.random() * 1000);
-  }, 4000);
-
+  // setInterval(() => {
+  //   if (!overviewData.value) return;
+  //   // 模拟数据更新
+  //   overviewData.value.dataCount = Math.floor(Math.random() * 100000);
+  //   overviewData.value.queueLen = Math.floor(Math.random() * 10000);
+  //   overviewData.value.delay = Math.floor(Math.random() * 100);
+  //   overviewData.value.energy = Math.floor(Math.random() * 1000);
+  // }, 4000);
   loading.value = false;
 });
 
@@ -120,12 +122,8 @@ function getGradientColor(color: CardData['color']) {
           <h3 class="text-16px">{{ item.title }}</h3>
           <div class="flex justify-between pt-3px">
             <NSpin :show="loading" size="small">
-              <CountTo
-                :suffix="item.unit"
-                :start-value="0"
-                :end-value="item.value"
-                class="text-25px text-white dark:text-dark"
-              />
+              <!-- <CountTo :suffix="item.unit" :start-value="0" :end-value="item.value" /> -->
+              <div class="text-25px text-white dark:text-dark">{{ item.value.toFixed(2) }} {{ item.unit }}</div>
             </NSpin>
           </div>
         </GradientBg>

@@ -20,7 +20,8 @@ export default defineConfig(
       ],
       'unocss/order-attributify': 'off',
       'vue/no-static-inline-styles': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off'
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'no-useless-return': 'off'
     }
   }
 );

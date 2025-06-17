@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRef } from 'vue';
-import type { NodeProps } from '@vue-flow/core';
+import { type NodeProps } from '@vue-flow/core';
 
 const props = defineProps<NodeProps>();
 
@@ -49,6 +49,15 @@ const processLabel = toRef(() => {
     <span class="text-xl">
       {{ processLabel }}
     </span>
+
+    <!--
+ <Handle v-if="!isSender" type="target" :position="targetPosition">
+      <span v-if="!data.isRunning && !data.isFinished && !data.isCancelled && !data.isSkipped && !data.hasError">
+        📥
+      </span>
+    </Handle>
+    <Handle v-if="!isReceiver" type="source" :position="sourcePosition" />
+-->
   </div>
 </template>
 

@@ -8,8 +8,12 @@ export const useGraphStore = defineStore('graph', () => {
   const nodes = ref<Node[]>([]);
   const edges = ref<Edge[]>([]);
   const settings = reactive({
-    layoutDirection: 'LR' // Top to Bottom
+    layoutDirection: 'LR', // Top to Bottom
+    taskSize: 100,
+    taskNum: 8,
+    taskInterval: 0
   });
+  const algStatus = ref<Api.Alg.AlgStatus>({} as Api.Alg.AlgStatus);
   const isInit = ref(false);
 
   // const nestNetworkNodes = () => {
@@ -58,6 +62,7 @@ export const useGraphStore = defineStore('graph', () => {
     nodes,
     edges,
     initGraph,
-    settings
+    settings,
+    algStatus
   };
 });

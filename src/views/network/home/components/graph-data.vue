@@ -4,6 +4,7 @@ import { Panel, SelectionMode, VueFlow, useVueFlow } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { Icon } from '@iconify/vue';
+import { fetchAlgStatus, fetchStartAlg, fetchStopAlg } from '@/service/api/algorithm';
 import { useGraphStore } from '@/store/modules/graph';
 import { useLayout } from '@/hooks/common/flow';
 import SpecialNode from '@/components/business/SpecialNode.vue';
@@ -21,6 +22,7 @@ const { nodes, edges } = toRefs(store);
 
 const isRunning = ref(false);
 const showSettings = ref(false);
+const timer = ref<NodeJS.Timeout | null>(null);
 
 const selectedNode = computed(() => getSelectedNodes.value?.[0]);
 const selectedEdge = computed(() => getSelectedEdges.value?.[0]);
@@ -34,17 +36,54 @@ const initLayout = (direction: string) => {
   });
 };
 
-const stop = () => {
+const stopAlg = async () => {
   isRunning.value = false;
+  if (timer.value) {
+    clearInterval(timer.value);
+    timer.value = null;
+  }
+  // 停止算法
+  await fetchStopAlg();
 };
 
-const run = () => {
+const startAlg = async () => {
   isRunning.value = true;
+  // 构造数据，请求
+  const { taskSize, taskNum, taskInterval } = store.settings;
+  const fn = async () => {
+    const dataList: { userId: number; dataSize: number }[] = [];
+    for (let i = 0; i < taskNum; i += 1) {
+      const userNodes = nodes.value.filter(node => node.data.nodeType === 'user_equipment');
+      const targetNode = userNodes[Math.floor(Math.random() * userNodes.length)];
+      const targetSize = Math.random() * taskSize + 10; // 随机任务大小
+      dataList.push({ userId: targetNode.data.id, dataSize: targetSize * 1000 });
+    }
+    await fetchStartAlg(dataList);
+  };
+  // 启动第一次任务
+  fn();
+  // 轮询获取结果
+
+  // 轮询添加任务
+  if (taskInterval > 0) {
+    timer.value = setInterval(fn, taskInterval * 1000);
+  }
+};
+
+const loopGetStatus = () => {
+  const fn = async () => {
+    const data = await fetchAlgStatus();
+    store.algStatus = data;
+    isRunning.value = data.isRunning;
+    setTimeout(fn, 1000);
+  };
+  fn();
 };
 
 onMounted(async () => {
   await store.initGraph();
-  initLayout('LR');
+  loopGetStatus();
+  // initLayout('LR');
 });
 </script>
 
@@ -75,7 +114,7 @@ onMounted(async () => {
           v-if="isRunning"
           class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
           title="停止"
-          @click="stop"
+          @click="stopAlg"
         >
           <Icon icon="ant-design:stop-outlined" class="text-lg" />
           <span class="absolute h-6 w-6 animate-spin border-2 border-white border-t-transparent rounded-full" />
@@ -84,7 +123,7 @@ onMounted(async () => {
           v-else
           class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
           title="开始"
-          @click="run"
+          @click="startAlg"
         >
           <Icon icon="ant-design:play-circle-outlined" class="text-lg" />
         </button>
@@ -120,7 +159,7 @@ onMounted(async () => {
       <NForm :model="store" label-placement="left" size="small">
         <NFormItem label="布局方向">
           <NSelect
-            :value="store.settings.layoutDirection"
+            v-model:value="store.settings.layoutDirection"
             :options="[
               { label: '水平布局', value: 'LR' },
               { label: '垂直布局', value: 'TB' }
@@ -128,8 +167,14 @@ onMounted(async () => {
             @update:value="initLayout(store.settings.layoutDirection)"
           />
         </NFormItem>
-        <NFormItem label="基站数量">
-          <NInputNumber :min="1" :max="100" :step="1" />
+        <NFormItem label="任务大小(MB)">
+          <NInputNumber v-model:value="store.settings.taskSize" :min="10" :max="500" :step="1" />
+        </NFormItem>
+        <NFormItem label="任务数量">
+          <NInputNumber v-model:value="store.settings.taskNum" :min="1" :max="100" :step="1" />
+        </NFormItem>
+        <NFormItem label="任务间隔">
+          <NInputNumber v-model:value="store.settings.taskInterval" :min="0" :max="10" :step="1" />
         </NFormItem>
       </NForm>
     </Panel>
