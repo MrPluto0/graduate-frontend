@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { useGraphStore } from '@/store/modules/graph';
 import { useEcharts } from '@/hooks/common/echarts';
 
 defineOptions({
   name: 'LineChart'
 });
+
+const store = useGraphStore();
 
 const { domRef, updateOptions } = useEcharts(() => ({
   title: {
@@ -28,7 +31,7 @@ const { domRef, updateOptions } = useEcharts(() => ({
   xAxis: {
     type: 'category',
     boundaryGap: false,
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: [1, 2, 3, 4, 5, 6, 7]
   },
   yAxis: {
     type: 'value',
@@ -47,8 +50,8 @@ const { domRef, updateOptions } = useEcharts(() => ({
 
 async function mockData() {
   updateOptions(opts => {
-    opts.series[0].data.shift();
-    opts.series[0].data.push(Math.floor(Math.random() * 25000));
+    opts.xAxis.data.push(opts.xAxis.data.length);
+    opts.series[0].data.push(store.algStatus.queue ?? 0);
     return opts;
   });
 }
