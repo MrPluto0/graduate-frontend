@@ -1,68 +1,87 @@
-import type { Edge, Node as VueFlowNode } from '@vue-flow/core';
+import type { EdgeData, NodeData } from '@antv/g6';
 
 /** 将 API 的节点格式转换为 VueFlow 格式 */
-function apiToVueFlowNode(node: Node): VueFlowNode {
+function toAntNode(node: ApiNode): NodeData {
   return {
     id: String(node.id),
-    position: { x: node.x, y: node.y },
-    type: 'special',
-    data: node
+    type: 'image',
+    style: {
+      size: 40,
+      x: node.x,
+      y: node.y,
+      labelText: node.name,
+      src: node.nodeType === 'user_equipment' ? '/proxy-static/phone.png' : '/proxy-static/uav.png'
+    },
+    state: {
+      inactive: {
+        fillOpacity: 0.5
+      },
+      disabled: {
+        fillOpacity: 0.2
+      }
+    },
+    data: {
+      ...node,
+      cluster: node.nodeType === 'user_equipment' ? '用户设备' : '无人机基站'
+    } as any // 使用 any 类型以兼容 VueFlow 的数据结构
   };
 }
 
 /** 将 VueFlow 的节点格式转换为 API 格式 */
-function vueFlowToNode(node: VueFlowNode): Partial<Node> {
+function fromAntNode(node: NodeData): Partial<ApiNode> {
   return {
     id: Number(node.id),
-    name: node.data?.name,
-    x: node.position.x,
-    y: node.position.y,
-    deviceId: node.data?.deviceId,
-    properties: node.data?.properties,
-    description: node.data?.description
+    x: node.style?.x,
+    y: node.style?.y,
+    name: node.data?.name as string,
+    deviceId: node.data?.deviceId as number,
+    properties: node.data?.properties as string,
+    description: node.data?.description as string
   };
 }
 
 /** 将 API 的连线格式转换为 VueFlow 格式 */
-function apiToVueFlowEdge(link: Link): Edge {
+function toAntEdge(link: ApiEdge): EdgeData {
   return {
     id: `e${link.sourceId}-${link.targetId}`,
+    type: 'cubic',
     source: String(link.sourceId),
     target: String(link.targetId),
-    type: 'special',
-    animated: true,
-    data: link
+    style: {
+      lineWidth: 2
+    },
+    data: link as any // 使用 any 类型以兼容 VueFlow 的数据结构
   };
 }
 
 /** 将 VueFlow 的边格式转换为 API 格式 */
-function vueFlowToApiEdge(edge: Edge): Partial<Link> {
+function fromAntEdge(edge: EdgeData): Partial<ApiEdge> {
   return {
-    name: edge.data?.name,
-    status: edge.data?.status,
     sourceId: Number(edge.source),
     targetId: Number(edge.target),
-    properties: edge.data?.properties,
-    description: edge.data?.description
+    name: edge.data?.name as string,
+    status: edge.data?.status as string,
+    properties: edge.data?.properties as string,
+    description: edge.data?.description as string
   };
 }
 
 /** 批量转换节点列表：API -> VueFlow */
-export function apiToVueFlowNodes(nodes: Node[]): VueFlowNode[] {
-  return nodes.map(apiToVueFlowNode);
+export function toAntNodes(nodes: ApiNode[]): NodeData[] {
+  return nodes.map(toAntNode);
 }
 
 /** 批量转换节点列表：VueFlow -> API */
-export function vueFlowToNodes(nodes: VueFlowNode[]): Partial<Node>[] {
-  return nodes.map(vueFlowToNode);
+export function fromAntNodes(nodes: NodeData[]): Partial<ApiNode>[] {
+  return nodes.map(fromAntNode);
 }
 
 /** 批量转换连线列表：API -> VueFlow */
-export function apiToVueFlowEdges(links: Link[]): Edge[] {
-  return links.map(apiToVueFlowEdge);
+export function toAntEdges(links: ApiEdge[]): EdgeData[] {
+  return links.map(toAntEdge);
 }
 
 /** 批量转换连线列表：VueFlow -> API */
-export function vueFlowToApiEdges(edges: Edge[]): Partial<Link>[] {
-  return edges.map(vueFlowToApiEdge);
+export function fromAntEdges(edges: EdgeData[]): Partial<ApiEdge>[] {
+  return edges.map(fromAntEdge);
 }

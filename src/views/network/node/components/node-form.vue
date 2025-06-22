@@ -8,7 +8,7 @@ import { fetchDeviceList } from '@/service/api/device';
 
 const props = defineProps<{
   type: 'add' | 'edit';
-  nodeData?: Node;
+  nodeData?: ApiNode;
 }>();
 
 const emit = defineEmits<{
@@ -17,7 +17,7 @@ const emit = defineEmits<{
 }>();
 
 const formRef = ref<FormInst>();
-const formModel = ref<Partial<Node>>({
+const formModel = ref<Partial<ApiNode>>({
   name: '',
   description: '',
   x: 0,
@@ -83,7 +83,7 @@ async function handleSubmit() {
     };
 
     if (props.type === 'add') {
-      await fetchCreateNode(form as Node);
+      await fetchCreateNode(form as ApiNode);
       window.$message?.success('创建成功');
     } else if (props.nodeData?.id) {
       await fetchUpdateNode(props.nodeData.id, form);

@@ -1,44 +1,71 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import type { VueUiQuickChartConfig } from 'vue-data-ui';
-import { VueUiQuickChart } from 'vue-data-ui';
-import { useGraphStore } from '@/store/modules/graph';
-import 'vue-data-ui/style.css';
+import { onMounted } from 'vue';
+import { useEcharts } from '@/hooks/common/echarts';
 
-const dataset = ref([
-  {
-    name: '节点时延',
-    values: [0, 0, 0, 0, 0, 0, 0]
-  }
-]);
-
-const config = ref<VueUiQuickChartConfig>({
-  title: '系统的总时延',
-  height: 230,
-  xyPeriods: [0, 1, 2, 3, 4, 5, 6],
-  yAxisLabel: '时延(ms)',
-  showUserOptions: false,
-  xyPaddingBottom: 10,
-  dataLabelRoundingValue: 2
+defineOptions({
+  name: 'LineChart'
 });
 
-const store = useGraphStore();
+const { domRef, updateOptions } = useEcharts(() => ({
+  title: {
+    text: '单位时间网络时延趋势图',
+    left: 'center'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  },
+  yAxis: {
+    type: 'value',
+    axisLabel: {
+      formatter: '{value} ms'
+    }
+  },
+  series: [
+    {
+      name: 'Node1',
+      type: 'line',
+      data: [120, 132, 101, 134, 90, 230, 210]
+    }
+  ]
+}));
+
+async function mockData() {
+  updateOptions(opts => {
+    opts.series[0].data.shift();
+    opts.series[0].data.push(Math.floor(Math.random() * 200));
+    return opts;
+  });
+}
 
 onMounted(() => {
+  mockData();
+
   setInterval(() => {
-    if (dataset.value[0].values.length >= 10) {
-      dataset.value[0].values.shift();
-      config.value.xyPeriods = config.value.xyPeriods?.map(v => Number(v) + 1);
-    } else {
-      config.value.xyPeriods?.push(config.value.xyPeriods.length);
-    }
-    dataset.value[0].values.push(store.algStatus?.delay ?? 0);
-  }, 1000);
+    mockData();
+  }, 2000);
 });
 </script>
 
 <template>
-  <NCard class="card-wrapper">
-    <VueUiQuickChart :dataset="dataset" :config="config" />
+  <NCard :bordered="false" class="card-wrapper">
+    <div ref="domRef" class="h-360px overflow-hidden"></div>
   </NCard>
 </template>
+
+<style scoped></style>

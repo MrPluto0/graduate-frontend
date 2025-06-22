@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAppStore } from '@/store/modules/app';
-import GraphData from './components/graph-data.vue';
 import CardData from './components/card-data.vue';
 import QueueLineChart from './components/queue-line-chart.vue';
 import DelayLineChart from './components/delay-line-chart.vue';
 import EnergyLineChart from './components/energy-line-chart.vue';
+import GraphData from './components/graph-data.vue';
 
 const appStore = useAppStore();
 
@@ -16,7 +16,7 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
   <NSpace vertical :size="16">
     <CardData />
 
-    <div class="h-120 card-wrapper">
+    <div class="card-wrapper">
       <GraphData />
     </div>
 

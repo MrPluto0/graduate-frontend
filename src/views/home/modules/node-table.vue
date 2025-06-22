@@ -69,7 +69,7 @@ const { loading, data, columns } = useTable({
 });
 
 // 查看关联设备
-function handleShowDevices(row: Node) {
+function handleShowDevices(row: ApiNode) {
   currentDeviceId.value = row.deviceId;
   showDeviceModal.value = true;
 }

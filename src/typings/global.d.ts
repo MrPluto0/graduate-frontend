@@ -69,8 +69,8 @@ declare global {
   }
 
   /** Interface for topology node */
-  export interface Node {
-    /** Node ID */
+  export interface ApiNode {
+    /** ApiNode ID */
     id: number;
     /** Creation time */
     createdAt: string;
@@ -78,18 +78,20 @@ declare global {
     updatedAt: string;
     /** Deletion time */
     deletedAt?: string;
-    /** Node name */
+    /** ApiNode name */
     name: string;
-    /** Node position coordinates [x, y] */
+    /** ApiNode position coordinates [x, y] */
     x: number;
     y: number;
-    /** Node properties (JSON format) */
+    /** ApiNode properties (JSON format) */
     properties?: string;
     /** Associated device ID */
     deviceId?: number;
     /** Associated device */
     device?: Device;
-    /** Node description */
+    /** ApiNode type */
+    nodeType: 'user_equipment' | 'base——station';
+    /** ApiNode description */
     description: string;
     cpu?: number | string;
     mem?: number | string;
@@ -97,8 +99,8 @@ declare global {
   }
 
   /** Interface for topology link */
-  export interface Link {
-    /** Link ID */
+  export interface ApiEdge {
+    /** ApiEdge ID */
     id: number;
     /** Creation time */
     createdAt: string;
@@ -106,21 +108,21 @@ declare global {
     updatedAt: string;
     /** Deletion time */
     deletedAt?: string;
-    /** Link name */
+    /** ApiEdge name */
     name: string;
-    /** Link status */
+    /** ApiEdge status */
     status: string;
     /** Source node ID */
     sourceId: number;
     /** Source node */
-    source?: Node;
+    source?: ApiNode;
     /** Target node ID */
     targetId: number;
     /** Target node */
-    target?: Node;
-    /** Link properties (JSON format) */
+    target?: ApiNode;
+    /** ApiEdge properties (JSON format) */
     properties?: string;
-    /** Link description */
+    /** ApiEdge description */
     description: string;
     bandwidth?: number | string;
     delay?: number | string;

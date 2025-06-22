@@ -2,7 +2,7 @@ import { request } from '../request';
 
 /** 获取节点列表 */
 export function fetchLinkList(params: Api.Common.CommonSearchParams & { search?: string }) {
-  return request<Api.Common.PaginatingQueryRecord<Link>>({
+  return request<Api.Common.PaginatingQueryRecord<ApiEdge>>({
     url: '/network/links',
     method: 'get',
     params
@@ -10,7 +10,7 @@ export function fetchLinkList(params: Api.Common.CommonSearchParams & { search?:
 }
 
 /** 创建节点 */
-export function fetchCreateLink(params: Link) {
+export function fetchCreateLink(params: ApiEdge) {
   return request({
     url: '/network/links',
     method: 'post',
@@ -19,7 +19,7 @@ export function fetchCreateLink(params: Link) {
 }
 
 /** 更新节点 */
-export function fetchUpdateLink(id: string | number, data: Partial<Link>) {
+export function fetchUpdateLink(id: string | number, data: Partial<ApiEdge>) {
   return request({
     url: `/network/links/${id}`,
     method: 'put',
@@ -37,7 +37,7 @@ export function fetchDeleteLink(id: string | number) {
 
 /** 获取节点详情 */
 export function fetchLinkDetail(id: string | number) {
-  return request<Link>({
+  return request<ApiEdge>({
     url: `/network/links/${id}`,
     method: 'get'
   });

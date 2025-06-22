@@ -9,7 +9,7 @@ import { fetchCreateLink, fetchUpdateLink } from '@/service/api/link';
 interface Props {
   visible?: boolean;
   operateType: 'add' | 'edit';
-  editingData?: Link | null;
+  editingData?: ApiEdge | null;
 }
 
 interface Emits {
@@ -30,7 +30,7 @@ const nodeList = ref<SelectOption[]>([]);
 const sourceLoading = ref(false);
 const targetLoading = ref(false);
 
-const model = ref<Partial<Link>>({
+const model = ref<Partial<ApiEdge>>({
   name: '',
   status: 'up',
   sourceId: undefined,
@@ -102,7 +102,7 @@ async function handleSubmit() {
       await fetchUpdateLink(props.editingData.id, form);
       window.$message?.success('更新成功');
     } else {
-      await fetchCreateLink(form as Link);
+      await fetchCreateLink(form as ApiEdge);
       window.$message?.success('创建成功');
     }
 

@@ -122,7 +122,7 @@ function getGradientColor(color: CardData['color']) {
     </DefineGradientBg>
     <!-- define component end: GradientBg -->
 
-    <NGrid cols="s:1 m:2 l:5" responsive="screen" :x-gap="16" :y-gap="16">
+    <NGrid cols="m:2 l:5" responsive="screen" :x-gap="16" :y-gap="16">
       <NGi v-for="item in cardData" :key="item.key">
         <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
           <h3 class="text-16px">{{ item.title }}</h3>

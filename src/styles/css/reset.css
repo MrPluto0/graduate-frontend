@@ -65,7 +65,7 @@ hr {
 }
 
 /*
-Add the correct text decoration in Chrome, Edge, and Safari.
+Add the correct text decoration in Chrome, ApiEdge, and Safari.
 */
 
 abbr:where([title]) {
@@ -96,7 +96,7 @@ a {
 }
 
 /*
-Add the correct font weight in Edge and Safari.
+Add the correct font weight in ApiEdge and Safari.
 */
 
 b,
@@ -181,7 +181,7 @@ textarea {
 }
 
 /*
-Remove the inheritance of text transform in Edge and Firefox.
+Remove the inheritance of text transform in ApiEdge and Firefox.
 */
 
 button,

@@ -137,9 +137,9 @@ export function useEcharts<T extends ECOption>(optionsFactory: () => T, hooks: C
 
     Object.assign(chartOptions, updatedOpts);
 
-    if (isRendered()) {
-      chart?.clear();
-    }
+    // if (isRendered()) {
+    //   chart?.clear();
+    // }
 
     chart?.setOption({ ...updatedOpts, backgroundColor: 'transparent' });
 

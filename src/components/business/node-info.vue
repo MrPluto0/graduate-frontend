@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { NButton, NDescriptions, NDescriptionsItem, NSpace, NTag } from 'naive-ui';
-import type { Node } from '@vue-flow/core';
-import DeviceDetailModal from '@/components/business/device-detail-modal.vue';
+import type { NodeData } from '@antv/g6';
+import DeviceDetailModal from './device-detail-modal.vue';
 
 const props = defineProps<{
-  node: Node;
+  node: NodeData;
 }>();
 
 const nodeData = computed(() => props.node.data || {});
@@ -37,9 +37,8 @@ const showDeviceModal = ref(false);
           </NButton>
         </NSpace>
       </NDescriptionsItem>
-      <NDescriptionsItem label="坐标">
-        ({{ node.position.x.toFixed(0) }}, {{ node.position.y.toFixed(0) }})
-      </NDescriptionsItem>
+      <!-- @vue-skip -->
+      <NDescriptionsItem label="坐标">({{ node.style.x.toFixed(0) }}, {{ node.style.y.toFixed(0) }})</NDescriptionsItem>
       <NDescriptionsItem v-if="nodeData.properties" label="属性">
         <pre>{{ nodeData.properties }}</pre>
       </NDescriptionsItem>
@@ -48,6 +47,7 @@ const showDeviceModal = ref(false);
       </NDescriptionsItem>
     </NDescriptions>
 
+    <!-- @vue-skip -->
     <DeviceDetailModal v-model:show="showDeviceModal" :device-id="nodeData.deviceId" />
   </div>
 </template>

@@ -8,54 +8,41 @@ defineOptions({
 
 const { domRef, updateOptions } = useEcharts(() => ({
   title: {
-    text: '单位时间网络队列趋势图',
+    text: '单位时间网络流量趋势图',
     left: 'center'
   },
   tooltip: {
     trigger: 'axis'
   },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  toolbox: {
-    feature: {
-      saveAsImage: {}
-    }
-  },
   xAxis: {
     type: 'category',
-    boundaryGap: false,
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   },
   yAxis: {
-    type: 'value',
-    axisLabel: {
-      formatter: '{value} bits'
-    }
+    type: 'value'
   },
   series: [
     {
-      name: 'Node1',
-      type: 'line',
-      data: [13300, 13222, 10157, 13794, 26090, 23032, 21360]
+      data: [120, 200, 150, 80, 70, 110, 130],
+      type: 'bar'
     }
   ]
 }));
 
 async function mockData() {
+  await new Promise(resolve => {
+    setTimeout(resolve, 1000);
+  });
+
   updateOptions(opts => {
     opts.series[0].data.shift();
-    opts.series[0].data.push(Math.floor(Math.random() * 25000));
+    opts.series[0].data.push(Math.floor(Math.random() * 200));
     return opts;
   });
 }
 
 onMounted(() => {
   mockData();
-
   setInterval(() => {
     mockData();
   }, 2000);

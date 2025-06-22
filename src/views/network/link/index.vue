@@ -8,7 +8,7 @@ import LinkForm from './components/link-form.vue';
 // 抽屉相关状态
 const drawerVisible = ref(false);
 const operateType = ref<'add' | 'edit'>('add');
-const editingData = ref<Link | null>(null);
+const editingData = ref<ApiEdge | null>(null);
 
 // 查询参数
 const searchParams = ref('');

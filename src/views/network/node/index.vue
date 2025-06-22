@@ -14,7 +14,7 @@ const searchParams = ref({
 // 侧边栏控制
 const showDrawer = ref(false);
 const drawerType = ref<'add' | 'edit'>('add');
-const editingNode = ref<Node | undefined>();
+const editingNode = ref<ApiNode | undefined>();
 
 // 设备详情模态框控制
 const showDeviceModal = ref(false);
@@ -105,7 +105,7 @@ function handleAdd() {
 }
 
 // 编辑节点
-function handleEdit(row: Node) {
+function handleEdit(row: ApiNode) {
   drawerType.value = 'edit';
   editingNode.value = row;
   showDrawer.value = true;
@@ -118,7 +118,7 @@ function handleFormSuccess() {
 }
 
 // 删除节点
-function handleDelete(row: Node) {
+function handleDelete(row: ApiNode) {
   dialog.warning({
     title: '确认删除',
     content: `确定要删除节点 "${row.name}" 吗？`,
@@ -137,7 +137,7 @@ function handleDelete(row: Node) {
 }
 
 // 查看关联设备
-function handleShowDevices(row: Node) {
+function handleShowDevices(row: ApiNode) {
   currentDeviceId.value = row.deviceId;
   showDeviceModal.value = true;
 }
