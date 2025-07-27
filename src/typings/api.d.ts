@@ -73,6 +73,7 @@ declare namespace Api {
       isInitialized: boolean;
       timeSlot: number;
       queue: number;
+      transferPath: Record<number, number[]>;
       eachQueue: number[];
       delay: number;
       energy: number;

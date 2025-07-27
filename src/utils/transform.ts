@@ -31,8 +31,8 @@ function toAntNode(node: ApiNode): NodeData {
 function fromAntNode(node: NodeData): Partial<ApiNode> {
   return {
     id: Number(node.id),
-    x: node.style?.x,
-    y: node.style?.y,
+    x: Math.floor(node.style?.x || 0),
+    y: Math.floor(node.style?.y || 0),
     name: node.data?.name as string,
     deviceId: node.data?.deviceId as number,
     properties: node.data?.properties as string,
@@ -42,13 +42,18 @@ function fromAntNode(node: NodeData): Partial<ApiNode> {
 
 /** 将 API 的连线格式转换为 VueFlow 格式 */
 function toAntEdge(link: ApiEdge): EdgeData {
+  const interUPF = link.source?.nodeType === 'base_station' && link.target?.nodeType === 'base_station';
   return {
     id: `e${link.sourceId}-${link.targetId}`,
     type: 'cubic',
     source: String(link.sourceId),
     target: String(link.targetId),
     style: {
-      lineWidth: 2
+      lineWidth: interUPF ? 3 : 2,
+      stroke: interUPF ? '#5B8FF9' : '#a0d9fb',
+      labelText: interUPF ? 'Inter-UPF' : '⚡',
+      labelBackground: true,
+      labelBackgroundFillOpacity: 0.8
     },
     data: link as any // 使用 any 类型以兼容 VueFlow 的数据结构
   };

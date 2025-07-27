@@ -1,8 +1,10 @@
 import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { EdgeData, NodeData } from '@antv/g6';
+import { ExtensionCategory, register } from '@antv/g6';
 import { fetchNetworkTopo } from '@/service/api/network';
 import { toAntEdges, toAntNodes } from '@/utils/transform';
+import { FlyMarkerCubic } from './data';
 
 export const useGraphStore = defineStore('graph', () => {
   // 图配置
@@ -20,8 +22,11 @@ export const useGraphStore = defineStore('graph', () => {
   // 算法状态
   const algStatus = ref<Api.Alg.AlgStatus>({} as Api.Alg.AlgStatus);
 
-  const initGraphData = async () => {
-    if (isInit.value) return;
+  const initGraphData = async (force = false) => {
+    if (isInit.value && !force) return;
+
+    // 注册自定义标记
+    register(ExtensionCategory.EDGE, 'fly-cubic', FlyMarkerCubic);
 
     const res = await fetchNetworkTopo();
     nodes.value = toAntNodes(res.nodes);

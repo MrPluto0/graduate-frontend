@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useGraphStore } from '@/store/modules/graph';
 import { useEcharts } from '@/hooks/common/echarts';
+import { round } from '@/utils/data';
 
 defineOptions({
   name: 'LineChart'
@@ -31,7 +32,7 @@ const { domRef, updateOptions } = useEcharts(() => ({
   xAxis: {
     type: 'category',
     boundaryGap: false,
-    data: [1, 2, 3, 4, 5, 6, 7]
+    data: [0]
   },
   yAxis: {
     type: 'value',
@@ -41,17 +42,39 @@ const { domRef, updateOptions } = useEcharts(() => ({
   },
   series: [
     {
-      name: 'Node1',
+      name: '实时',
       type: 'line',
-      data: [13300, 13222, 10157, 13794, 26090, 23032, 21360]
+      data: [0],
+      lineStyle: {
+        color: '#003f5c'
+      },
+      itemStyle: {
+        color: '#003f5c'
+      }
+    },
+    {
+      name: '累计',
+      type: 'line',
+      data: [0],
+      lineStyle: {
+        color: '#5bc0de'
+      },
+      itemStyle: {
+        color: '#5bc0de'
+      }
     }
   ]
 }));
 
 async function mockData() {
   updateOptions(opts => {
-    opts.xAxis.data.push(opts.xAxis.data.length);
-    opts.series[0].data.push(store.algStatus.queue ?? 0);
+    const len = opts.xAxis.data.length;
+    const queue = store.algStatus.queue ?? 0;
+    opts.xAxis.data.push(len);
+    opts.series[0].data.push(round(queue, 0));
+
+    const totalQueue = opts.series[1].data[len - 1] || 0;
+    opts.series[1].data.push(round((totalQueue + queue) / len, 0));
     return opts;
   });
 }

@@ -42,3 +42,13 @@ export function fetchNodeDetail(id: string | number) {
     method: 'get'
   });
 }
+
+export function batchUpdateNodePosition(nodes: Partial<ApiNode>[]) {
+  return request({
+    url: '/network/nodes/batch-position',
+    method: 'patch',
+    data: {
+      nodes
+    }
+  });
+}

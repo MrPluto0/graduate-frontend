@@ -84,14 +84,6 @@ const cardData = computed<CardData[]>(() => [
 ]);
 
 onMounted(() => {
-  // setInterval(() => {
-  //   if (!overviewData.value) return;
-  //   // 模拟数据更新
-  //   overviewData.value.dataCount = Math.floor(Math.random() * 100000);
-  //   overviewData.value.queueLen = Math.floor(Math.random() * 10000);
-  //   overviewData.value.delay = Math.floor(Math.random() * 100);
-  //   overviewData.value.energy = Math.floor(Math.random() * 1000);
-  // }, 4000);
   loading.value = false;
 });
 

@@ -90,7 +90,7 @@ declare global {
     /** Associated device */
     device?: Device;
     /** ApiNode type */
-    nodeType: 'user_equipment' | 'base——station';
+    nodeType: 'user_equipment' | 'base_station';
     /** ApiNode description */
     description: string;
     cpu?: number | string;
