@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { useGraphStore } from '@/store/modules/graph';
 import { useEcharts } from '@/hooks/common/echarts';
-import { round } from '@/utils/data';
+import { appendData, round } from '@/utils/data';
 
 defineOptions({
   name: 'LineChart'
@@ -66,24 +66,24 @@ const { domRef, updateOptions } = useEcharts(() => ({
   ]
 }));
 
-async function mockData() {
+async function updateData() {
   updateOptions(opts => {
     const len = opts.xAxis.data.length;
-    const delay = store.algStatus.delay ?? 0;
-    opts.xAxis.data.push(len);
-    opts.series[0].data.push(round(delay));
-
+    const delay = store.algStatus.state?.totalDelay ?? 0;
     const totalDelay = opts.series[1].data[len - 1] || 0;
-    opts.series[1].data.push(round((totalDelay + delay) / len));
+
+    appendData(opts.xAxis, opts.xAxis.data[len - 1] + 1);
+    appendData(opts.series[0], round(delay));
+    appendData(opts.series[1], round((totalDelay * (len - 1) + delay) / len));
     return opts;
   });
 }
 
 onMounted(() => {
-  mockData();
+  updateData();
 
   setInterval(() => {
-    mockData();
+    updateData();
   }, 2000);
 });
 </script>

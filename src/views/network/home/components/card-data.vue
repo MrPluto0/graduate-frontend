@@ -20,14 +20,6 @@ interface CardData {
 
 const store = useGraphStore();
 
-// const overviewData = ref({
-//   dataCount: 100123,
-//   queueLen: 12312,
-//   delay: 12,
-//   energy: 123,
-//   utilization: 90
-// });
-
 const loading = ref(true);
 
 const cardData = computed<CardData[]>(() => [
@@ -44,7 +36,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'queueLen',
     title: '系统平均队列长度',
-    value: store.algStatus.queue ?? 0,
+    value: store.algStatus.state?.totalQueue ?? 0,
     unit: ' bits',
     color: {
       start: '#56cdf3',
@@ -54,7 +46,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'nodeCount',
     title: '系统当前时延',
-    value: store.algStatus.delay ?? 0,
+    value: store.algStatus.state?.totalDelay ?? 0,
     unit: ' ms',
     color: {
       start: '#865ec0',
@@ -64,7 +56,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'linkCount',
     title: '系统当前能耗',
-    value: store.algStatus.energy ?? 0,
+    value: store.algStatus.state?.totalEnergy ?? 0,
     unit: ' J',
     color: {
       start: '#fcbc25',
@@ -73,8 +65,8 @@ const cardData = computed<CardData[]>(() => [
   },
   {
     key: 'utilization',
-    title: '系统当前资源利用率',
-    value: (store.algStatus.utilization ?? 0) * 100,
+    title: '系统活跃任务数',
+    value: (store.algStatus.activeTasks ?? 0) * 100,
     unit: ' %',
     color: {
       start: '#ff4d4f',

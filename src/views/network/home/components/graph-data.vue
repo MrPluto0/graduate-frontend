@@ -134,9 +134,9 @@ const loopGetStatus = () => {
     isRunning.value = data.isRunning;
 
     // 更新路径和节点信息
-    updateTransferPath();
-    updateActiveNode();
-    graph?.render();
+    // updateTransferPath();
+    // updateActiveNode();
+    // graph?.render();
   };
 
   getInfoTimer.value = setInterval(fn, 2000);

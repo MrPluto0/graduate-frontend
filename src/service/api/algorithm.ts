@@ -1,10 +1,10 @@
 import { request } from '../request';
 
-export function fetchStartAlg(userDataList: { userId: number; dataSize: any }[]) {
+export function fetchStartAlg(data: []) {
   return request({
     url: '/algorithm/start',
     method: 'post',
-    data: { userDataList }
+    data
   });
 }
 
@@ -16,7 +16,7 @@ export function fetchStopAlg() {
 }
 
 export function fetchAlgStatus() {
-  return request<Api.Alg.AlgStatus>({
+  return request<Partial<Api.Alg.AlgStatus>>({
     url: '/algorithm/info',
     method: 'get'
   });

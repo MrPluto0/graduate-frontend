@@ -20,7 +20,7 @@ export const useGraphStore = defineStore('graph', () => {
   });
 
   // 算法状态
-  const algStatus = ref<Api.Alg.AlgStatus>({} as Api.Alg.AlgStatus);
+  const algStatus = ref<Api.Alg.AlgStatus>({ state: {}} as Api.Alg.AlgStatus);
 
   const initGraphData = async (force = false) => {
     if (isInit.value && !force) return;

@@ -68,16 +68,40 @@ declare namespace Api {
   }
 
   namespace Alg {
+    interface UserTask {
+      userId: number;
+      name: string;
+      type: string;
+      dataSize: any;
+      priority: number;
+      status: string;
+      createdAt: string;
+    }
+
     interface AlgStatus {
+      userCount: number;
+      commCount: number;
       isRunning: boolean;
       isInitialized: boolean;
       timeSlot: number;
-      queue: number;
-      transferPath: Record<number, number[]>;
-      eachQueue: number[];
-      delay: number;
-      energy: number;
-      utilization: number;
+      transferPath: Record<string, number[]>;
+      taskCount: number;
+      activeTasks: number;
+      completedTasks: number;
+      state: {
+        commQueues: Record<string, number>;
+        totalQueue: number;
+        transferDelay: number;
+        computeDelay: number;
+        totalDelay: number;
+        transferEnergy: number;
+        computeEnergy: number;
+        totalEnergy: number;
+        load: number;
+        cost: number;
+        drift: number;
+        penalty: number;
+      };
     }
   }
 
