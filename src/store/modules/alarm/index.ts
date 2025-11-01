@@ -15,9 +15,9 @@ export const useAlarmStore = defineStore('alarm', () => {
         method: 'get',
         params: { current, size }
       });
-      if (res.data) {
-        events.value = res.data.records;
-        total.value = res.data.total;
+      if (res) {
+        events.value = res.records;
+        total.value = res.total;
       }
     } finally {
       loading.value = false;

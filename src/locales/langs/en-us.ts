@@ -170,6 +170,7 @@ const local: App.I18n.Schema = {
     device: 'Device',
     device_home: 'Device List',
     device_task: 'Task List',
+    'device_task-detail': 'Task Detail',
     log: 'System Log',
     log_home: 'System Alarm',
     user: 'User',

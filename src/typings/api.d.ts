@@ -92,6 +92,12 @@ declare namespace Api {
       totalEnergy: number; // 总能耗
     }
 
+    interface TransferPath {
+      path: number[]; // 设备ID路径
+      speeds: number[]; // 每段的传输速率
+      powers: number[]; // 每段的传输功率
+    }
+
     interface Task {
       id: number;
       userId: number;
@@ -104,11 +110,10 @@ declare namespace Api {
 
       // 调度结果
       assignedCommId?: number; // AssignedCommID
-      transferPath?: number[] | null; // 传输路径
+      transferPath?: TransferPath | null; // 传输路径
 
       // 时间
       scheduledTime?: string; // 调度时间
-      startTime?: string; // 开始时间
       completeTime?: string; // 完成时间
 
       // 性能指标历史

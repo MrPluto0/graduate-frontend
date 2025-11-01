@@ -173,16 +173,13 @@ onMounted(() => {
             <NDescriptionsItem label="调度时间">
               {{ task.scheduledTime ? dayjs(task.scheduledTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
             </NDescriptionsItem>
-            <NDescriptionsItem label="开始时间">
-              {{ task.startTime ? dayjs(task.startTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
-            </NDescriptionsItem>
             <NDescriptionsItem label="完成时间">
               {{ task.completeTime ? dayjs(task.completeTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
             </NDescriptionsItem>
             <NDescriptionsItem label="传输路径" :span="2">
-              <div v-if="task.transferPath && task.transferPath.length > 0">
-                <span v-for="(node, idx) in task.transferPath" :key="idx">
-                  节点 {{ node }}<span v-if="idx < task.transferPath.length - 1"> → </span>
+              <div v-if="task.transferPath && task.transferPath.path && task.transferPath.path.length > 0">
+                <span v-for="(node, idx) in task.transferPath.path" :key="idx">
+                  节点 {{ node }}<span v-if="idx < task.transferPath.path.length - 1"> → </span>
                 </span>
               </div>
               <div v-else>-</div>
@@ -191,7 +188,7 @@ onMounted(() => {
         </NCard>
 
         <!-- 传输路径可视化 -->
-        <NCard v-if="task.transferPath && task.transferPath.length > 0" title="传输路径可视化" class="card-wrapper">
+        <NCard v-if="task.transferPath && task.transferPath.path && task.transferPath.path.length > 0" title="传输路径可视化" class="card-wrapper">
           <GraphData :transfer-path="task.transferPath" />
         </NCard>
 

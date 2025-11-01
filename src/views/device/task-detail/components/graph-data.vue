@@ -5,7 +5,7 @@ import { Graph } from '@antv/g6';
 import { useGraphStore } from '@/store/modules/graph';
 
 interface Props {
-  transferPath?: number[] | null;
+  transferPath?: Api.Alg.TransferPath | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,7 +19,7 @@ let graph: Graph | null = null;
 const updateTransferPath = () => {
   if (!graph) return;
 
-  const paths = props.transferPath;
+  const paths = props.transferPath?.path;
 
   // 重置所有边为默认样式
   const resetEdges: EdgeData[] = store.edges.map(edge => ({
@@ -71,7 +71,7 @@ const updateTransferPath = () => {
 const updatePathNodes = () => {
   if (!graph) return;
 
-  const paths = props.transferPath;
+  const paths = props.transferPath?.path;
   const pathNodeIds = new Set(paths?.map(id => String(id)) || []);
 
   const updateNodes = store.nodes.map(node => {
@@ -147,14 +147,14 @@ onBeforeUnmount(() => {
     <div id="task-path-container" class="rounded-lg"></div>
 
     <!-- 路径说明 -->
-    <div v-if="transferPath && transferPath.length > 0" class="absolute left-4 top-4 rounded-lg bg-white/90 p-3 shadow-lg">
+    <div v-if="transferPath && transferPath.path && transferPath.path.length > 0" class="absolute left-4 top-4 rounded-lg bg-white/90 p-3 shadow-lg">
       <div class="mb-2 text-sm font-semibold text-gray-700">传输路径</div>
       <div class="flex items-center gap-2 text-sm">
-        <span v-for="(nodeId, idx) in transferPath" :key="nodeId" class="flex items-center gap-2">
+        <span v-for="(nodeId, idx) in transferPath.path" :key="nodeId" class="flex items-center gap-2">
           <span class="rounded bg-blue-100 px-2 py-1 font-medium text-blue-700">
             节点 {{ nodeId }}
           </span>
-          <span v-if="idx < transferPath.length - 1" class="text-gray-400">→</span>
+          <span v-if="idx < transferPath.path.length - 1" class="text-gray-400">→</span>
         </span>
       </div>
     </div>

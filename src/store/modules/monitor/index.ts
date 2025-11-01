@@ -13,8 +13,8 @@ export const useMonitorStore = defineStore('monitor', () => {
         url: '/system/metrics',
         method: 'get'
       });
-      if (res.data) {
-        metrics.value = res.data;
+      if (res) {
+        metrics.value = res;
       }
     } finally {
       loading.value = false;
