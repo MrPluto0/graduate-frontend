@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
+import { storeToRefs } from 'pinia';
 import { fetchOverviewData } from '@/service/api/device';
+import { useAlarmStore } from '@/store/modules/alarm/index';
 
 defineOptions({
   name: 'CardData'
@@ -19,6 +21,9 @@ interface CardData {
   icon: string;
 }
 
+const alarmStore = useAlarmStore();
+const { total: alarmCount } = storeToRefs(alarmStore);
+
 const overviewData = ref({
   deviceCount: 0,
   activeCount: 0,
@@ -27,6 +32,7 @@ const overviewData = ref({
 });
 
 const loading = ref(true);
+let intervalId: NodeJS.Timeout | null = null;
 
 const cardData = computed<CardData[]>(() => [
   {
@@ -76,7 +82,7 @@ const cardData = computed<CardData[]>(() => [
   {
     key: 'alarmCount',
     title: '异常报警数',
-    value: 4,
+    value: alarmCount.value,
     unit: '',
     color: {
       start: '#ff4d4f',
@@ -99,6 +105,18 @@ async function getOverviewData() {
 
 onMounted(() => {
   getOverviewData();
+  alarmStore.fetchAlarms(1, 10);
+
+  // 每10秒刷新一次告警数量
+  intervalId = setInterval(() => {
+    alarmStore.fetchAlarms(1, 10);
+  }, 10000);
+});
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 
 interface GradientBgProps {

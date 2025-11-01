@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import { NCard, NEmpty, NList, NListItem, NText } from 'naive-ui';
+import { NCard, NEmpty, NList, NListItem, NText, NTag } from 'naive-ui';
 import dayjs from 'dayjs';
 import { Icon } from '@iconify/vue';
 import { useAlarmStore } from '@/store/modules/alarm/index';
 
 const alarmStore = useAlarmStore();
-const { events } = storeToRefs(alarmStore);
+const { events, loading } = storeToRefs(alarmStore);
+
+let intervalId: NodeJS.Timeout | null = null;
 
 onMounted(() => {
-  setInterval(() => {
-    events.value.unshift({
-      id: events.value.length + 1,
-      createdAt: Date(),
-      updatedAt: Date(),
-      name: 'CPU Usage High',
-      eventType: 'CPU',
-      status: 'resolved',
-      description: 'CPU usage above 80%',
-      deviceId: 1
-    });
-  }, 3000);
+  // 初始加载
+  alarmStore.fetchAlarms(1, 10);
+
+  // 每5秒刷新一次
+  intervalId = setInterval(() => {
+    alarmStore.fetchAlarms(1, 10);
+  }, 5000);
+});
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 </script>
 

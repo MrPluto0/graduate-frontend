@@ -146,6 +146,43 @@ declare namespace Api {
   }
 
   /**
+   * namespace Alarm
+   *
+   * backend api module: "alarm"
+   */
+  namespace Alarm {
+    interface Alarm {
+      id: number;
+      name: string;
+      eventType: string;
+      status: string;
+      description: string;
+      createdAt: string;
+      updatedAt: string;
+      resolvedAt?: string;
+    }
+
+    type AlarmListResponse = Common.PaginatingQueryRecord<Alarm>;
+  }
+
+  /**
+   * namespace Monitor
+   *
+   * backend api module: "monitor"
+   */
+  namespace Monitor {
+    interface SystemMetrics {
+      timestamp: string;
+      cpu_usage: number;
+      mem_total: number;
+      mem_used: number;
+      mem_free: number;
+      mem_usage_rate: number;
+      goroutine_count: number;
+    }
+  }
+
+  /**
    * namespace Route
    *
    * backend api module: "route"

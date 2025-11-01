@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useEcharts } from '@/hooks/common/echarts';
+import { useMonitorStore } from '@/store/modules/monitor/index';
 
 defineOptions({
   name: 'LineChart'
 });
+
+const monitorStore = useMonitorStore();
+const { metrics } = storeToRefs(monitorStore);
+
+let intervalId: NodeJS.Timeout | null = null;
 
 const { domRef, updateOptions } = useEcharts(() => ({
   series: [
@@ -153,29 +160,38 @@ const { domRef, updateOptions } = useEcharts(() => ({
       },
       data: [
         {
-          value: 70,
-          name: '存储使用率'
+          value: 10,
+          name: 'Goroutines'
         }
       ]
     }
   ]
 }));
 
-async function mockData() {
-  // 模拟数据更新
-  updateOptions(opts => {
-    opts.series[0].data[0].value = Math.floor(Math.random() * 100);
-    opts.series[1].data[0].value = Math.floor(Math.random() * 100);
-    opts.series[2].data[0].value = Math.floor(Math.random() * 100);
-    return opts;
-  });
+async function updateMetrics() {
+  await monitorStore.fetchSystemMetrics();
+
+  if (metrics.value) {
+    updateOptions(opts => {
+      opts.series[0].data[0].value = Math.round(metrics.value!.cpu_usage);
+      opts.series[1].data[0].value = Math.round(metrics.value!.mem_usage_rate);
+      opts.series[2].data[0].value = Math.min(100, Math.round(metrics.value!.goroutine_count * 2));
+      return opts;
+    });
+  }
 }
 
 onMounted(() => {
-  mockData();
-  setInterval(() => {
-    mockData();
-  }, 2000);
+  updateMetrics();
+  intervalId = setInterval(() => {
+    updateMetrics();
+  }, 3000);
+});
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 </script>
 
