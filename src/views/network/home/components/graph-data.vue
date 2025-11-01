@@ -7,12 +7,12 @@ import { fetchAlgStatus, fetchStartAlg, fetchStopAlg } from '@/service/api/algor
 import { batchUpdateNodePosition } from '@/service/api/node';
 import { useGraphStore } from '@/store/modules/graph';
 import { fromAntNodes } from '@/utils/transform';
+import TaskCreate from '@/components/business/task-create.vue';
 
 let graph: Graph | null = null;
 
 const isRunning = ref(false);
-const showSettings = ref(false);
-const sendDataTimer = ref<NodeJS.Timeout>();
+const showTaskCreate = ref(false);
 const getInfoTimer = ref<NodeJS.Timeout>();
 
 const store = useGraphStore();
@@ -23,36 +23,7 @@ const selectedEdge = ref<EdgeData>();
 // 停止算法
 const handleStopAlg = async () => {
   isRunning.value = false;
-  if (sendDataTimer.value) {
-    clearInterval(sendDataTimer.value);
-    sendDataTimer.value = undefined;
-  }
   await fetchStopAlg();
-};
-
-// 启动算法
-const handleStartAlg = async () => {
-  isRunning.value = true;
-  // 构造数据，请求
-  const { taskSize, taskNum, taskInterval } = store.settings;
-  const fn = async () => {
-    const dataList: { userId: number; dataSize: number }[] = [];
-    const userNodes = store.nodes.filter(node => node?.data?.nodeType === 'user_equipment');
-    for (let i = 0; i < taskNum; i += 1) {
-      const targetNode = userNodes[Math.floor(Math.random() * userNodes.length)];
-      const targetSize = Math.random() * taskSize + 10; // 随机任务大小
-      dataList.push({ userId: Number(targetNode.id), dataSize: targetSize * 1000 });
-    }
-    await fetchStartAlg(dataList);
-  };
-
-  // 启动第一次任务
-  fn();
-
-  // 轮询添加任务
-  if (taskInterval > 0) {
-    sendDataTimer.value = setInterval(fn, taskInterval * 1000);
-  }
 };
 
 // 保存位置
@@ -77,6 +48,11 @@ const handleRefreshGraph = async () => {
 
 // 更新图上节点的传输路径（点选中某节点时触发）
 const updateTransferPath = () => {
+  // 防御性检查：确保必要的数据存在
+  if (!store.algStatus?.transferPath || !graph) {
+    return;
+  }
+
   const userId = selectedNode.value?.id;
   const transferPath = store.algStatus.transferPath;
   const updateEdges: EdgeData[] = store.edges.filter(edge => {
@@ -94,10 +70,13 @@ const updateTransferPath = () => {
         const targetEdge = store.edges.find(
           e => e.id === `e${paths[i - 1]}-${paths[i]}` || e.id === `e${paths[i]}-${paths[i - 1]}`
         ) as EdgeData;
-        targetEdge.type = 'fly-cubic'; // 更新边类型为飞行曲线
-        targetEdge.source = String(paths[i - 1]);
-        targetEdge.target = String(paths[i]);
-        updateEdges.push(targetEdge);
+        // 防御性检查：确保找到了边
+        if (targetEdge) {
+          targetEdge.type = 'fly-cubic'; // 更新边类型为飞行曲线
+          targetEdge.source = String(paths[i - 1]);
+          targetEdge.target = String(paths[i]);
+          updateEdges.push(targetEdge);
+        }
       }
       console.log('updateEdges', updateEdges);
       graph?.updateEdgeData(updateEdges);
@@ -109,8 +88,13 @@ const updateTransferPath = () => {
 
 // 更新激活中的节点
 const updateActiveNode = () => {
+  // 防御性检查：确保必要的数据存在
+  if (!store.algStatus?.transferPath || !graph) {
+    return;
+  }
+
   const transferPath = store.algStatus.transferPath;
-  const activeUserIds = Object.keys(transferPath).filter(id => transferPath[Number(id)].length > 1);
+  const activeUserIds = Object.keys(transferPath).filter(id => transferPath[Number(id)]?.length > 1);
   const updateNodes = store.nodes.map(node => {
     if (node?.data?.nodeType === 'user_equipment') {
       // @ts-ignore
@@ -134,19 +118,22 @@ const loopGetStatus = () => {
     isRunning.value = data.isRunning;
 
     // 更新路径和节点信息
-    // updateTransferPath();
-    // updateActiveNode();
-    // graph?.render();
+    // 添加防御性检查：只有在算法运行且有传输路径时才更新
+    if (data.isRunning && data.transferPath && graph) {
+      try {
+        updateTransferPath();
+        updateActiveNode();
+        graph.render();
+      } catch (error) {
+        console.error('更新图数据失败:', error);
+      }
+    }
   };
 
   getInfoTimer.value = setInterval(fn, 2000);
 };
 
 onUnmounted(() => {
-  if (sendDataTimer.value) {
-    clearInterval(sendDataTimer.value);
-    sendDataTimer.value = undefined;
-  }
   if (getInfoTimer.value) {
     clearInterval(getInfoTimer.value);
     getInfoTimer.value = undefined;
@@ -195,7 +182,6 @@ onMounted(async () => {
     const nodeData = graph?.getNodeData(target.id);
     selectedNode.value = nodeData;
     selectedEdge.value = undefined; // 清除选中的边
-    showSettings.value = false; // 隐藏设置面板
   });
 
   graph.on(EdgeEvent.CLICK, e => {
@@ -204,13 +190,11 @@ onMounted(async () => {
     const edgeData = graph?.getEdgeData(target.id);
     selectedEdge.value = edgeData;
     selectedNode.value = undefined; // 清除选中的节点
-    showSettings.value = false; // 隐藏设置面板
   });
 
   graph.on('canvas:click', () => {
     selectedNode.value = undefined;
     selectedEdge.value = undefined; // 清除选中的边
-    showSettings.value = false; // 隐藏设置面板
   });
 
   loopGetStatus();
@@ -252,9 +236,16 @@ onBeforeUnmount(() => {
           v-else
           class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
           title="开始"
-          @click="handleStartAlg"
         >
           <Icon icon="ant-design:play-circle-outlined" class="text-lg" />
+        </button>
+
+        <button
+          class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
+          title="创建任务"
+          @click="showTaskCreate = true"
+        >
+          <Icon icon="ant-design:plus-circle-outlined" class="text-lg" />
         </button>
 
         <button
@@ -267,30 +258,15 @@ onBeforeUnmount(() => {
 
         <button
           class="h-8 w-8 flex items-center justify-center rounded-md bg-gray-800 text-white transition-all duration-200 ease-in-out hover:bg-gray-700 hover:shadow-md"
-          title="设置"
-          @click="showSettings = !showSettings"
+          title="保存拓扑位置"
+          @click="handleSavePosition"
         >
-          <Icon icon="ant-design:setting" class="text-lg" />
+          <Icon icon="ant-design:save-outlined" class="text-lg" />
         </button>
       </div>
     </div>
 
-    <div v-if="showSettings" class="absolute right-5 top-5 w-80 bg-white p-4 text-black shadow-lg">
-      <h3 class="mb-2 text-lg font-semibold">设置</h3>
-      <NForm :model="store" label-placement="left" size="small">
-        <NFormItem label="任务大小(MB)">
-          <NInputNumber v-model:value="store.settings.taskSize" :min="10" :max="500" :step="1" />
-        </NFormItem>
-        <NFormItem label="任务数量">
-          <NInputNumber v-model:value="store.settings.taskNum" :min="1" :max="100" :step="1" />
-        </NFormItem>
-        <NFormItem label="任务间隔">
-          <NInputNumber v-model:value="store.settings.taskInterval" :min="0" :max="10" :step="1" />
-        </NFormItem>
-        <NFormItem>
-          <NButton type="warning" @click="handleSavePosition">保存拓扑位置</NButton>
-        </NFormItem>
-      </NForm>
-    </div>
+    <!-- 任务创建弹窗 -->
+    <TaskCreate v-model:show="showTaskCreate" @success="loopGetStatus" />
   </div>
 </template>

@@ -42,25 +42,25 @@ const { domRef, updateOptions } = useEcharts(() => ({
   },
   series: [
     {
-      name: '实时',
+      name: '传输时延',
       type: 'line',
       data: [0],
       lineStyle: {
-        color: '#8d021f' // 设置线条颜色为红色
+        color: '#ff6f61'
       },
       itemStyle: {
-        color: '#8d021f' // 设置点的颜色为红色
+        color: '#ff6f61'
       }
     },
     {
-      name: '累计',
+      name: '计算时延',
       type: 'line',
       data: [0],
       lineStyle: {
-        color: '#ff6f61' // 设置线条颜色为红色
+        color: '#587aff'
       },
       itemStyle: {
-        color: '#ff6f61' // 设置点的颜色为红色
+        color: '#587aff'
       }
     }
   ]
@@ -69,12 +69,15 @@ const { domRef, updateOptions } = useEcharts(() => ({
 async function updateData() {
   updateOptions(opts => {
     const len = opts.xAxis.data.length;
-    const delay = store.algStatus.state?.totalDelay ?? 0;
-    const totalDelay = opts.series[1].data[len - 1] || 0;
+    const state = store.algStatus.state;
+
+    // 从后端获取真实的传输时延和计算时延
+    const transferDelay = round(state?.transferDelay ?? 0);
+    const computeDelay = round(state?.computeDelay ?? 0);
 
     appendData(opts.xAxis, opts.xAxis.data[len - 1] + 1);
-    appendData(opts.series[0], round(delay));
-    appendData(opts.series[1], round((totalDelay * (len - 1) + delay) / len));
+    appendData(opts.series[0], transferDelay); // 传输时延
+    appendData(opts.series[1], computeDelay); // 计算时延
     return opts;
   });
 }

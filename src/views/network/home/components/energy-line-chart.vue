@@ -42,25 +42,25 @@ const { domRef, updateOptions } = useEcharts(() => ({
   },
   series: [
     {
-      name: '实时',
+      name: '传输能耗',
       type: 'line',
       data: [0],
       lineStyle: {
-        color: '#e67e22' // 设置线条颜色为红色
+        color: '#e67e22'
       },
       itemStyle: {
-        color: '#e67e22' // 设置点的颜色为红色
+        color: '#e67e22'
       }
     },
     {
-      name: '累计',
+      name: '计算能耗',
       type: 'line',
       data: [0],
       lineStyle: {
-        color: '#d4a010' // 设置线条颜色为红色
+        color: '#d4a010'
       },
       itemStyle: {
-        color: '#d4a010' // 设置点的颜色为红色
+        color: '#d4a010'
       }
     }
   ]
@@ -69,12 +69,15 @@ const { domRef, updateOptions } = useEcharts(() => ({
 async function updateData() {
   updateOptions(opts => {
     const len = opts.xAxis.data.length;
-    const energy = store.algStatus.state?.totalEnergy ?? 0;
-    const totalEnergy = opts.series[1].data[len - 1] || 0;
+    const state = store.algStatus.state;
+
+    // 从后端获取真实的传输能耗和计算能耗
+    const transferEnergy = round(state?.transferEnergy ?? 0);
+    const computeEnergy = round(state?.computeEnergy ?? 0);
 
     appendData(opts.xAxis, opts.xAxis.data[len - 1] + 1);
-    appendData(opts.series[0], round(energy));
-    appendData(opts.series[1], round((totalEnergy * (len - 1) + energy) / len));
+    appendData(opts.series[0], transferEnergy); // 传输能耗
+    appendData(opts.series[1], computeEnergy); // 计算能耗
     return opts;
   });
 }

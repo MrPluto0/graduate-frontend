@@ -168,6 +168,8 @@ const local: App.I18n.Schema = {
     network_node: 'Network ApiNode',
     network_link: 'Network ApiEdge',
     device: 'Device',
+    device_home: 'Device List',
+    device_task: 'Task List',
     log: 'System Log',
     log_home: 'System Alarm',
     user: 'User',

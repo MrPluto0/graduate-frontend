@@ -21,6 +21,9 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "device": "/device";
+    "device_home": "/device/home";
+    "device_task": "/device/task";
+    "device_task-detail": "/device/task-detail";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "log": "/log";
@@ -95,7 +98,9 @@ declare module "@elegant-router/types" {
     | "500"
     | "iframe-page"
     | "login"
-    | "device"
+    | "device_home"
+    | "device_task-detail"
+    | "device_task"
     | "home"
     | "log_home"
     | "network_home"

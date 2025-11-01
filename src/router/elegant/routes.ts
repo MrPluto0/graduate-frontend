@@ -42,13 +42,43 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'device',
     path: '/device',
-    component: 'layout.base$view.device',
+    component: 'layout.base',
     meta: {
       title: 'device',
       i18nKey: 'route.device',
       order: 3,
       icon: 'mdi:mobile-devices'
-    }
+    },
+    children: [
+      {
+        name: 'device_home',
+        path: '/device/home',
+        component: 'view.device_home',
+        meta: {
+          title: 'device_home',
+          i18nKey: 'route.device_home'
+        }
+      },
+      {
+        name: 'device_task',
+        path: '/device/task',
+        component: 'view.device_task',
+        meta: {
+          title: 'device_task',
+          i18nKey: 'route.device_task'
+        }
+      },
+      {
+        name: 'device_task-detail',
+        path: '/device/task-detail',
+        component: 'view.device_task-detail',
+        meta: {
+          title: 'device_task-detail',
+          i18nKey: 'route.device_task-detail',
+          hideInMenu: true
+        }
+      }
+    ]
   },
   {
     name: 'home',

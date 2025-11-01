@@ -3,7 +3,7 @@ import { h, ref } from 'vue';
 import { NButton, NDataTable, NDrawer, NDrawerContent, NInput, NSpace, NTag, useDialog } from 'naive-ui';
 import { fetchDeleteDevice, fetchDeviceList } from '@/service/api/device';
 import { useTable } from '@/hooks/common/table';
-import DeviceForm from './components/DeviceForm.vue';
+import DeviceForm from './components/device-form.vue';
 
 // 搜索参数
 const searchParams = ref({
@@ -21,6 +21,11 @@ const { loading, data, columns, pagination, getData } = useTable({
   apiFn: fetchDeviceList,
   apiParams: { current: 1, size: 10, search: searchParams.value.search },
   columns: () => [
+    {
+      title: '设备ID',
+      key: 'id',
+      width: 70
+    },
     {
       title: '设备名称',
       key: 'name',

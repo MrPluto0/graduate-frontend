@@ -68,15 +68,55 @@ declare namespace Api {
   }
 
   namespace Alg {
-    interface UserTask {
+    interface TaskMetrics {
+      transferDelay: number;
+      computeDelay: number;
+      totalDelay: number;
+      transferEnergy: number;
+      computeEnergy: number;
+      totalEnergy: number;
+    }
+
+    interface SlotMetrics {
+      timeSlot: number; // 时隙编号
+      transferredData: number; // 本时隙传输的数据量
+      processedData: number; // 本时隙处理的数据量
+      queuedData: number; // 本时隙结束时的队列数据量
+      cumulativeProcessed: number; // 累计已处理数据量
+      resourceFraction: number; // 分配的资源比例
+      transferDelay: number; // 传输延迟
+      computeDelay: number; // 计算延迟
+      totalDelay: number; // 总延迟
+      transferEnergy: number; // 传输能耗
+      computeEnergy: number; // 计算能耗
+      totalEnergy: number; // 总能耗
+    }
+
+    interface Task {
+      id: number;
       userId: number;
       name: string;
       type: string;
-      dataSize: any;
+      dataSize: number;
       priority: number;
-      status: string;
+      status: number; // 后端使用整数表示状态
       createdAt: string;
+
+      // 调度结果
+      assignedCommId?: number; // AssignedCommID
+      transferPath?: number[] | null; // 传输路径
+
+      // 时间
+      scheduledTime?: string; // 调度时间
+      startTime?: string; // 开始时间
+      completeTime?: string; // 完成时间
+
+      // 性能指标历史
+      metricsHistory?: SlotMetrics[]; // 每个时隙的执行历史
     }
+
+    // 兼容：如果代码仍在使用 UserTask 名称，提供别名
+    type UserTask = Task;
 
     interface AlgStatus {
       userCount: number;

@@ -1,6 +1,6 @@
 import { request } from '../request';
 
-export function fetchStartAlg(data: []) {
+export function fetchStartAlg(data: Partial<Api.Alg.UserTask>[]) {
   return request({
     url: '/algorithm/start',
     method: 'post',
@@ -16,8 +16,33 @@ export function fetchStopAlg() {
 }
 
 export function fetchAlgStatus() {
-  return request<Partial<Api.Alg.AlgStatus>>({
+  return request<Api.Alg.AlgStatus>({
     url: '/algorithm/info',
     method: 'get'
+  });
+}
+
+/** 查询任务列表 */
+export function fetchTaskList(params: Api.Common.CommonSearchParams) {
+  return request<Api.Common.PaginatingQueryRecord<Api.Alg.UserTask>>({
+    url: '/algorithm/tasks',
+    method: 'get',
+    params
+  });
+}
+
+/** 获取任务详情 */
+export function fetchTaskDetail(id: string) {
+  return request<Api.Alg.UserTask>({
+    url: `/algorithm/tasks/${id}`,
+    method: 'get'
+  });
+}
+
+/** 删除任务 */
+export function fetchDeleteTask(id: string) {
+  return request({
+    url: `/algorithm/tasks/${id}`,
+    method: 'delete'
   });
 }

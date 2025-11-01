@@ -14,13 +14,10 @@ export const useGraphStore = defineStore('graph', () => {
 
   // 特殊配置
   const settings = reactive({
-    taskSize: 100,
-    taskNum: 8,
-    taskInterval: 0
   });
 
   // 算法状态
-  const algStatus = ref<Api.Alg.AlgStatus>({ state: {}} as Api.Alg.AlgStatus);
+  const algStatus = ref<Api.Alg.AlgStatus>({ state: {} } as Api.Alg.AlgStatus);
 
   const initGraphData = async (force = false) => {
     if (isInit.value && !force) return;
