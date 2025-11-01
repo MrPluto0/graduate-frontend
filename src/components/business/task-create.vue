@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue';
 import { useGraphStore } from '@/store/modules/graph';
-import { fetchStartAlg } from '@/service/api/algorithm';
+import { fetchStartAlg } from '@/services/api/algorithm';
 
 interface Props {
   show: boolean;

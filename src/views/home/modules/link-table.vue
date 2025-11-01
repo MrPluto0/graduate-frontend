@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from 'vue';
 import { NDataTable, NTag } from 'naive-ui';
-import { fetchLinkList } from '@/service/api/link';
+import { fetchLinkList } from '@/services/api/link';
 import { useTable } from '@/hooks/common/table';
 // 查询参数
 const searchParams = ref('');

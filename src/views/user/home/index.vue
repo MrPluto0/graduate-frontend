@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, ref } from 'vue';
 import { NButton, NDataTable, NInput, NSpace, NTag, useDialog } from 'naive-ui';
-import { fetchUserList } from '@/service/api/admin';
+import { fetchUserList } from '@/services/api/admin';
 import { useTable } from '@/hooks/common/table';
 
 // 搜索参数

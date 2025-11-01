@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { NButton, NForm, NFormItem, NInput, NSelect, useMessage } from 'naive-ui';
-import { fetchCreateUser } from '@/service/api/admin';
+import { fetchCreateUser } from '@/services/api/admin';
 
 const form = ref<Partial<User> & { password: string }>({
   username: '',

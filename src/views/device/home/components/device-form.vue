@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { NForm, NFormItem, NInput, NSelect } from 'naive-ui';
 import type { FormInst } from 'naive-ui';
-import { fetchCreateDevice, fetchUpdateDevice } from '@/service/api/device';
+import { fetchCreateDevice, fetchUpdateDevice } from '@/services/api/device';
 
 const props = defineProps<{
   type: 'add' | 'edit';

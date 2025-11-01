@@ -3,8 +3,8 @@ import { ref, watch } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { NButton, NDrawer, NDrawerContent, NForm, NFormItem, NInput, NSelect } from 'naive-ui';
 import type { FormInst, FormRules, SelectOption } from 'naive-ui';
-import { fetchNodeList } from '@/service/api/node';
-import { fetchCreateLink, fetchUpdateLink } from '@/service/api/link';
+import { fetchNodeList } from '@/services/api/node';
+import { fetchCreateLink, fetchUpdateLink } from '@/services/api/link';
 
 interface Props {
   visible?: boolean;

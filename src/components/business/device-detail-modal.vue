@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { NDescriptions, NDescriptionsItem, NModal, NSpin, NTag } from 'naive-ui';
-import { fetchDeviceDetail } from '@/service/api/device';
+import { fetchDeviceDetail } from '@/services/api/device';
 
 interface Props {
   show?: boolean;

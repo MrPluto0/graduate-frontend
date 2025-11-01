@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, ref } from 'vue';
 import { NButton, NDataTable, NDrawer, NDrawerContent, NInput, NSpace, NTag, useDialog } from 'naive-ui';
-import { fetchDeleteDevice, fetchDeviceList } from '@/service/api/device';
+import { fetchDeleteDevice, fetchDeviceList } from '@/services/api/device';
 import { useTable } from '@/hooks/common/table';
 import DeviceForm from './components/device-form.vue';
 

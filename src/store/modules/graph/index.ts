@@ -2,7 +2,7 @@ import { reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { EdgeData, NodeData } from '@antv/g6';
 import { ExtensionCategory, register } from '@antv/g6';
-import { fetchNetworkTopo } from '@/service/api/network';
+import { fetchNetworkTopo } from '@/services/api/network';
 import { toAntEdges, toAntNodes } from '@/utils/transform';
 import { FlyMarkerCubic } from './data';
 

@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import type { FormInst, FormRules, SelectOption } from 'naive-ui';
 import { NButton, NForm, NFormItem, NInput, NInputNumber, NSelect, NSpace } from 'naive-ui';
-import { fetchCreateNode, fetchUpdateNode } from '@/service/api/node';
-import { fetchDeviceList } from '@/service/api/device';
+import { fetchCreateNode, fetchUpdateNode } from '@/services/api/node';
+import { fetchDeviceList } from '@/services/api/device';
 
 const props = defineProps<{
   type: 'add' | 'edit';

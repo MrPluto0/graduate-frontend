@@ -3,7 +3,7 @@ import { h, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { NButton, NDataTable, NInput, NSpace, NTag, useDialog } from 'naive-ui';
 import dayjs from 'dayjs';
-import { fetchDeleteTask, fetchTaskList } from '@/service/api/algorithm';
+import { fetchDeleteTask, fetchTaskList } from '@/services/api/algorithm';
 import { useTable } from '@/hooks/common/table';
 import TaskCreate from '@/components/business/task-create.vue';
 

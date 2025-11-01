@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { fetchOverviewData } from '@/service/api/device';
+import { fetchOverviewData } from '@/services/api/device';
 import { useAlarmStore } from '@/store/modules/alarm/index';
 
 defineOptions({

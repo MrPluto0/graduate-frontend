@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, ref } from 'vue';
 import { NButton, NDataTable, NDrawer, NDrawerContent, NInput, NSpace, useDialog } from 'naive-ui';
-import { fetchDeleteNode, fetchNodeList } from '@/service/api/node';
+import { fetchDeleteNode, fetchNodeList } from '@/services/api/node';
 import { useTable } from '@/hooks/common/table';
 import DeviceDetailModal from '@/components/business/device-detail-modal.vue';
 import NodeForm from './components/node-form.vue';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from 'vue';
 import { NButton, NDataTable, NSpace } from 'naive-ui';
-import { fetchNodeList } from '@/service/api/node';
+import { fetchNodeList } from '@/services/api/node';
 import { useTable } from '@/hooks/common/table';
 import DeviceDetailModal from '@/components/business/device-detail-modal.vue';
 

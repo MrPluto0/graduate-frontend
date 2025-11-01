@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, ref } from 'vue';
 import { NButton, NDataTable, NInput, NTag } from 'naive-ui';
-import { fetchDeleteLink, fetchLinkList } from '@/service/api/link';
+import { fetchDeleteLink, fetchLinkList } from '@/services/api/link';
 import { useTable } from '@/hooks/common/table';
 import LinkForm from './components/link-form.vue';
 

@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { NButton, NCard, NDescriptions, NDescriptionsItem, NProgress, NSpin, NStatistic, NTag } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import dayjs from 'dayjs';
-import { fetchTaskDetail } from '@/service/api/algorithm';
+import { fetchTaskDetail } from '@/services/api/algorithm';
 import { bitToMB } from '@/utils/data';
 import ProgressChart from './components/progress-chart.vue';
 import DelayChart from './components/delay-chart.vue';

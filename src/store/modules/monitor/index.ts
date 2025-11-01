@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { request } from '@/service/request';
+import { request } from '@/services/request';
 
 export const useMonitorStore = defineStore('monitor', () => {
   const metrics = ref<Api.Monitor.SystemMetrics | null>(null);
