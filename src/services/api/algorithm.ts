@@ -39,10 +39,27 @@ export function fetchTaskDetail(id: string) {
   });
 }
 
+/** 提交单个任务 */
+export function fetchSubmitTask(data: Partial<Api.Alg.UserTask>) {
+  return request<Api.Alg.UserTask>({
+    url: '/algorithm/tasks',
+    method: 'post',
+    data
+  });
+}
+
 /** 删除任务 */
 export function fetchDeleteTask(id: string) {
   return request({
     url: `/algorithm/tasks/${id}`,
     method: 'delete'
+  });
+}
+
+/** 清除历史记录 */
+export function fetchClearHistory() {
+  return request({
+    url: '/algorithm/clear',
+    method: 'post'
   });
 }
