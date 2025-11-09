@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { NButton, NCard, NDescriptions, NDescriptionsItem, NProgress, NSpin, NStatistic, NTag } from 'naive-ui';
 import { Icon } from '@iconify/vue';
@@ -16,6 +16,7 @@ const router = useRouter();
 
 const loading = ref(false);
 const task = ref<Api.Alg.Task | null>(null);
+let intervalId: NodeJS.Timeout | null = null;
 
 // 获取任务详情
 async function getTaskDetail() {
@@ -77,6 +78,14 @@ function getProgress() {
   return total > 0 ? Math.min(Math.round((processed / total) * 100), 100) : 0;
 }
 
+// 格式化时间（处理零值）
+function formatTime(time: string | undefined) {
+  if (!time || time.startsWith('0001-01-01')) {
+    return '-';
+  }
+  return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
+}
+
 // 返回列表
 function handleBack() {
   router.push('/device/task');
@@ -84,6 +93,26 @@ function handleBack() {
 
 onMounted(() => {
   getTaskDetail();
+
+  // 如果任务未完成，启动定时刷新（每3秒）
+  intervalId = setInterval(() => {
+    if (task.value && task.value.status !== 3) {
+      // status !== 3 表示未完成
+      getTaskDetail();
+    } else if (task.value && task.value.status === 3) {
+      // 任务完成，停止刷新
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+  }, 3000);
+});
+
+onUnmounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 </script>
 
@@ -171,10 +200,10 @@ onMounted(() => {
                   1].resourceFraction * 100).toFixed(2) : 0 }}%
             </NDescriptionsItem>
             <NDescriptionsItem label="调度时间">
-              {{ task.scheduledTime ? dayjs(task.scheduledTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
+              {{ formatTime(task.scheduledTime) }}
             </NDescriptionsItem>
             <NDescriptionsItem label="完成时间">
-              {{ task.completeTime ? dayjs(task.completeTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
+              {{ formatTime(task.completeTime) }}
             </NDescriptionsItem>
             <NDescriptionsItem label="传输路径" :span="2">
               <div v-if="task.transferPath && task.transferPath.path && task.transferPath.path.length > 0">
