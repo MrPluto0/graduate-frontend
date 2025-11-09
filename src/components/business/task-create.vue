@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { useGraphStore } from '@/store/modules/graph';
 import { fetchStartAlg } from '@/services/api/algorithm';
+import { mbToBit } from '@/utils/data';
 
 interface Props {
   show: boolean;
@@ -101,7 +102,7 @@ async function handleSubmit() {
         userId: targetUserId,
         name: formData.batchCount > 1 ? `${formData.name}_${i + 1}` : formData.name,
         type: formData.type,
-        dataSize: dataSize * 1000 * 1000 * 8, // 转换为 bit
+        dataSize: mbToBit(dataSize), // 转换为 bit
         priority: formData.priority
       });
     }
@@ -154,12 +155,7 @@ function handleCancel() {
       </NFormItem>
 
       <NFormItem label="目标用户">
-        <NSelect
-          v-model:value="formData.targetUserId"
-          :options="userNodes"
-          placeholder="不选择则随机分配"
-          clearable
-        />
+        <NSelect v-model:value="formData.targetUserId" :options="userNodes" placeholder="不选择则随机分配" clearable />
       </NFormItem>
 
       <NFormItem label="数据大小类型" required>
@@ -173,15 +169,15 @@ function handleCancel() {
       </NFormItem>
 
       <NFormItem v-if="formData.dataSizeType === 'fixed'" label="数据大小(MB)" required>
-        <NInputNumber v-model:value="formData.fixedDataSize" :min="1" :max="1000" :step="10" class="w-full" />
+        <NInputNumber v-model:value="formData.fixedDataSize" :max="100" class="w-full" />
       </NFormItem>
 
       <template v-else>
         <NFormItem label="最小数据大小(MB)" required>
-          <NInputNumber v-model:value="formData.minDataSize" :min="1" :max="1000" :step="10" class="w-full" />
+          <NInputNumber v-model:value="formData.minDataSize" :max="100" class="w-full" />
         </NFormItem>
         <NFormItem label="最大数据大小(MB)" required>
-          <NInputNumber v-model:value="formData.maxDataSize" :min="1" :max="1000" :step="10" class="w-full" />
+          <NInputNumber v-model:value="formData.maxDataSize" :max="100" class="w-full" />
         </NFormItem>
       </template>
 

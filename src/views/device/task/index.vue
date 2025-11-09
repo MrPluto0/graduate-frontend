@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { fetchDeleteTask, fetchTaskList } from '@/services/api/algorithm';
 import { useTable } from '@/hooks/common/table';
 import TaskCreate from '@/components/business/task-create.vue';
+import { bitToMB } from '@/utils/data';
 
 const router = useRouter();
 
@@ -63,8 +64,7 @@ const { loading, data, columns, pagination, getData } = useTable({
       width: 120,
       align: 'center',
       render(row) {
-        const sizeInMB = (row.dataSize / 1000).toFixed(2);
-        return `${sizeInMB} MB`;
+        return `${bitToMB(row.dataSize)} MB`;
       }
     },
     {

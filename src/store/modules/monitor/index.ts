@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { request } from '@/services/request';
+import { fetchSystemMetrics as fetchMetrics } from '@/services/api/monitor';
 
 export const useMonitorStore = defineStore('monitor', () => {
   const metrics = ref<Api.Monitor.SystemMetrics | null>(null);
@@ -9,10 +9,7 @@ export const useMonitorStore = defineStore('monitor', () => {
   async function fetchSystemMetrics() {
     loading.value = true;
     try {
-      const res = await request<Api.Monitor.SystemMetrics>({
-        url: '/system/metrics',
-        method: 'get'
-      });
+      const res = await fetchMetrics();
       if (res) {
         metrics.value = res;
       }

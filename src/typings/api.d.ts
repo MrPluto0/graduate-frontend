@@ -178,12 +178,12 @@ declare namespace Api {
   namespace Monitor {
     interface SystemMetrics {
       timestamp: string;
-      cpu_usage: number;
-      mem_total: number;
-      mem_used: number;
-      mem_free: number;
-      mem_usage_rate: number;
-      goroutine_count: number;
+      cpuUsage: number;
+      memTotal: number;
+      memUsed: number;
+      memFree: number;
+      memUsageRate: number;
+      goroutineCount: number;
     }
   }
 

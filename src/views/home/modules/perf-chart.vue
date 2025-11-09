@@ -173,9 +173,9 @@ async function updateMetrics() {
 
   if (metrics.value) {
     updateOptions(opts => {
-      opts.series[0].data[0].value = Math.round(metrics.value!.cpu_usage);
-      opts.series[1].data[0].value = Math.round(metrics.value!.mem_usage_rate);
-      opts.series[2].data[0].value = Math.min(100, Math.round(metrics.value!.goroutine_count * 2));
+      opts.series[0].data[0].value = Math.round(metrics.value!.cpuUsage);
+      opts.series[1].data[0].value = Math.round(metrics.value!.memUsageRate);
+      opts.series[2].data[0].value = Math.min(100, Math.round(metrics.value!.goroutineCount * 2));
       return opts;
     });
   }
